@@ -1,286 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>SpamSlam</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="./style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skiff Mail & Dashboard Clone</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 
+         * ==========================================
+         * CORE VARIABLES & RESET
+         * ==========================================
+         */
+        :root {
+            /* Brand Colors */
+            --color-blue-brand: #4BBDF6;
+            --color-blue-light: #e0f2fe;
+            --color-orange: #FF5722;
+            --color-green: #66BB6A;
+            --color-dark: #1F1F1F;
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-beige: #F4F4F1;
+            
+            /* Mine Dashboard Colors */
+            --mine-purple: #6C63FF;
+            --mine-bg-green: #E0F7FA; 
+            --mine-text-dark: #2D3748;
+            
+            /* Text Colors */
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+
+            /* UI Elements */
+            --border-color: #E6E6E6;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            
+            /* Layout */
+            --container-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-beige);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        ul { list-style: none; }
+        button { border: none; outline: none; background: none; font-family: inherit; cursor: pointer; }
+
+        .font-serif { font-family: 'DM Serif Display', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* 
+         * ==========================================
+         * NAVIGATION & HERO
+         * ==========================================
+         */
+        .hero-wrapper {
+            background-color: var(--color-blue-brand);
+            padding-bottom: 140px; 
+            position: relative;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 32px 48px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+        }
+
+        .hero-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 80px;
+            color: rgba(255,255,255,0.95);
+            line-height: 1;
+        }
+
+        /* Floating Pill Menu */
+        .nav-pill-wrapper {
+            position: absolute;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .nav-pill {
+            background: #1A1A1A;
+            color: white;
+            padding: 6px;
+            padding-right: 20px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        .pill-logo {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #FF7043, #E64A19);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .skiff-swirl { width: 20px; height: 20px; fill: white; }
+
+        .nav-item {
+            font-size: 14px; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer; position: relative; height: 40px;
+        }
+        .nav-item i { font-size: 10px; color: #888; transition: transform 0.2s; }
+        .nav-item:hover i { transform: rotate(180deg); }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            position: absolute; top: 50px; left: -20px; width: 280px;
+            background: #1A1A1A; border-radius: 16px; padding: 8px;
+            opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 101;
+        }
+        .nav-item:hover .dropdown-menu {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+
+        .dd-link {
+            display: flex; align-items: center; gap: 16px; padding: 12px;
+            border-radius: 10px; transition: background 0.1s;
+        }
+        .dd-link:hover { background: rgba(255,255,255,0.08); }
+
+        .dd-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0; background: #333; color: #ccc;
+        }
+        /* Product Dropdown specific colors */
+        .dd-icon.mail { background: #4BBDF6; color: white; }
+        .dd-icon.pages { background: #eee; color: #333; }
+        .dd-icon.cal { background: #EC407A; color: white; }
+        .dd-icon.drive { background: #43A047; color: white; }
+
+        .dd-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .dd-info p { font-size: 12px; color: #999; }
+
+        /* Hero Text */
+        .hero-content {
+            padding: 40px 60px 60px 60px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .hero-title {
+            color: white; font-size: 76px; line-height: 1.05; letter-spacing: -2px; font-weight: 400;
+        }
+        .title-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 70px; height: 52px;
+            background: linear-gradient(180deg, #81D4FA 0%, #4BBDF6 100%);
+            border: 2px solid white; border-radius: 12px;
+            vertical-align: middle; margin: 0 12px; position: relative; top: -6px;
+        }
+        .hero-desc {
+            color: white; font-size: 18px; line-height: 1.6; max-width: 440px; text-align: right; margin-bottom: 10px;
+        }
+
+        /* 
+         * ==========================================
+         * APP MOCKUP (Email Client)
+         * ==========================================
+         */
+        .app-mockup {
+            background: white;
+            margin: 0 40px; margin-top: -80px; 
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.1);
+            display: flex; height: 600px; overflow: hidden; position: relative; z-index: 5;
+            border-bottom: 1px solid #eee;
+        }
+        .app-sidebar {
+            width: 240px; background: #F8F9FA; border-right: 1px solid var(--border-color);
+            padding: 24px; display: flex; flex-direction: column;
+        }
+        .user-profile { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .user-profile-icon { font-size: 22px; color: var(--color-blue-brand); }
+        .btn-compose {
+            width: 100%; background: white; border: 1px solid #E0E0E0;
+            padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 600;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+        }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+        .menu-item { padding: 8px 12px; border-radius: 6px; font-size: 14px; color: #555; display: flex; gap: 12px; }
+        .menu-item.active { background: #E3E3E3; color: black; font-weight: 600; }
+        .app-inbox { flex: 1; background: white; display: flex; flex-direction: column; }
+        .inbox-header { padding: 20px 32px; border-bottom: 1px solid var(--border-color); font-weight: 700; display: flex; gap: 5px;}
+        .inbox-count { color: var(--color-orange); }
+        .email-row { display: flex; align-items: center; padding: 14px 32px; border-bottom: 1px solid #f0f0f0; }
+        .row-checkbox { width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 4px; margin-right: 16px; }
+        .checked .row-checkbox { background: var(--color-orange); border-color: var(--color-orange); display:flex; align-items:center; justify-content:center;}
+        .checked .row-checkbox::after { content: '✓'; color: white; font-size: 11px; font-weight: 900; }
+        .row-avatar { width: 36px; height: 36px; border-radius: 8px; margin-right: 16px; display: flex; align-items: center; justify-content: center; }
+        .row-content { flex: 1; font-size: 14px; display: flex; align-items: center; }
+        .row-sender { width: 180px; font-weight: 600; }
+        .row-subject { color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 450px; }
+
+        /* 
+         * ==========================================
+         * MINE DASHBOARD SECTION (NEW)
+         * ==========================================
+         */
+        .dashboard-container {
+            max-width: var(--container-width);
+            margin: 80px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 40px;
+            opacity: 0; /* For fade in animation */
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .dashboard-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Sidebar for dashboard */
+        .dash-sidebar {
+            width: 200px;
+            flex-shrink: 0;
+            padding-top: 60px;
+        }
+        .dash-nav-item {
+            display: block;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        .dash-nav-item.active {
+            color: var(--mine-purple);
+            font-weight: 600;
+        }
+
+        /* Main Dashboard Content */
+        .dash-content {
+            flex: 1;
+        }
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .dash-welcome {
+            font-family: 'DM Serif Display', serif;
+            font-size: 42px;
+            color: var(--mine-text-dark);
+        }
+        .dash-top-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+        .dash-top-stats div { display: flex; align-items: center; gap: 8px; }
+
+        /* Dashboard Grid */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.5fr;
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+
+        .dash-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+        }
+
+        /* Card 1: Improve Score (Green) */
+        .card-improve {
+            background: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: none;
+        }
+        .card-improve h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .card-improve p { font-size: 14px; color: #555; margin-bottom: 25px; line-height: 1.5; max-width: 80%; }
+        .btn-mine-action {
+            background: var(--mine-purple);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            width: fit-content;
+            transition: transform 0.2s;
+        }
+        .btn-mine-action:hover { transform: translateY(-2px); }
+        .bg-illustration-1 {
+            position: absolute; right: 20px; bottom: 20px;
+            font-size: 60px; color: rgba(0,0,0,0.05);
+        }
+
+        /* Card 2: Company Counter */
+        .card-companies {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .big-count-wrapper { display: flex; justify-content: space-between; align-items: flex-start; }
+        .count-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 64px;
+            line-height: 1;
+            color: #111;
+        }
+        .count-label { font-size: 14px; color: #666; max-width: 180px; margin-top: 10px; line-height: 1.4; }
+        .btn-outline-purple {
+            border: 1px solid var(--mine-purple);
+            color: var(--mine-purple);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            width: fit-content;
+        }
+        .illustration-balloon {
+            font-size: 48px; color: #ddd; opacity: 0.5;
+        }
+
+        /* Card 3: Gauge Progress */
+        .card-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .gauge-container {
+            position: relative;
+            width: 200px; height: 100px; /* Half circle */
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .gauge-svg {
+            width: 200px; height: 200px; /* Full circle */
+            transform: rotate(180deg);
+        }
+        .gauge-bg {
+            fill: none; stroke: #eee; stroke-width: 20;
+        }
+        .gauge-fill {
+            fill: none; stroke: var(--mine-purple); stroke-width: 20;
+            stroke-dasharray: 565; /* Circumference approx 2*PI*90 */
+            stroke-dashoffset: 565; /* Start empty */
+            transition: stroke-dashoffset 2s ease-out;
+            stroke-linecap: round;
+        }
+        .gauge-center-text {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        .gauge-percent { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 1; }
+        .gauge-sub { font-size: 12px; color: #888; margin-top: 5px; }
+
+        /* Card 4: Activity Stats */
+        .card-activity h4 { font-size: 16px; margin-bottom: 20px; font-weight: 600; display:flex; justify-content:space-between; align-items:center; }
+        .date-select { border: 1px solid #ddd; padding: 4px 10px; border-radius: 20px; font-size: 12px; color: #666; font-weight: 400; }
+        
+        .stats-row { display: flex; justify-content: space-between; gap: 20px; }
+        .stat-item { flex: 1; }
+        .stat-val { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 5px; display: block; }
+        .stat-label { font-size: 12px; color: #777; }
+        .stat-bar { 
+            height: 3px; background: var(--mine-purple); margin-top: 10px; border-radius: 2px;
+            width: 0; transition: width 1.5s ease-out;
+        }
+
+        /* 
+         * ==========================================
+         * EXISTING FEATURES & FOOTER
+         * ==========================================
+         */
+        .mission-statement { max-width: 900px; margin: 0 auto 60px auto; padding: 0 20px; }
+        .mission-title { font-family: 'DM Serif Display', serif; font-size: 52px; line-height: 1.15; color: #111; }
+        .highlight { color: var(--color-blue-brand); }
+
+        .features-grid {
+            max-width: var(--container-width); margin: 0 auto 100px auto; padding: 0 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+        }
+        .feature-card {
+            background: white; border-radius: 20px; padding: 40px;
+            box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.03);
+            display: flex; flex-direction: column; height: 500px; overflow: hidden;
+        }
+        .feature-text h3 { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
+        .feature-text p { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* Mockups for cards (simplified from previous iteration for brevity) */
+        .mockup-domains { background: #F8F9FA; border-radius: 12px; flex: 1; padding: 20px; display:flex; flex-direction:column; gap:10px; justify-content:center;}
+        .domain-row { background: white; padding: 12px; border-radius: 8px; border: 1px solid #eee; display: flex; justify-content:space-between; align-items:center;}
+        .mockup-compose { background: #F8F9FA; flex: 1; border-radius: 12px; padding: 20px; display:flex; align-items:center; justify-content:center;}
+        .comp-win { background: white; width: 100%; padding: 15px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); font-size: 13px;}
+
+        /* Dark Section */
+        .opensource-section {
+            max-width: var(--container-width); margin: 0 auto 100px auto;
+            background: #111; border-radius: 24px; padding: 80px 60px;
+            display: flex; gap: 60px; color: white; align-items: center;
+        }
+        .os-title { font-size: 44px; margin-bottom: 20px; line-height: 1.1; font-weight: 500;}
+        .text-yellow { color: #FDD835; }
+        .btn-dark-outline { border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 8px; color: white; display: inline-flex; gap: 10px; margin-right: 10px; margin-top: 20px;}
+
+        footer { background: #F0F0F0; border-top: 1px solid #E0E0E0; padding: 80px 0; }
+        .footer-inner { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+        .footer-cols { display: flex; gap: 80px; }
+        .f-col h5 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 20px; }
+        .f-col li { margin-bottom: 12px; font-size: 14px; }
+
+    </style>
 </head>
-<body data-dashboard-url="/dashboard">
-  <div class="top first-load" id="top">
-    <!-- Full SVG sprite sheet (icons) -->
-    <svg width="0" height="0" style="position:absolute; left:-9999px; top:auto;" aria-hidden="true" focusable="false">
-      <symbol id="envelope" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-      </symbol>
+<body>
 
-      <symbol id="amazon" viewBox="0 0 16 16">
-        <circle fill="hsl(36, 100%, 50%)" cx="8" cy="8" r="8"/>
-        <g fill="none" fill-rule="evenodd" transform="matrix(0.625, 0, 0, 0.625, 3, 3)">
-          <path d="M 8.468 8.653 C 8.22 9.147 7.796 9.465 7.337 9.573 C 7.267 9.573 7.161 9.608 7.055 9.608 C 6.278 9.608 5.819 9.007 5.819 8.124 C 5.819 6.993 6.49 6.464 7.337 6.216 C 7.796 6.11 8.326 6.074 8.856 6.074 L 8.856 6.499 C 8.856 7.311 8.891 7.946 8.468 8.653 Z M 8.856 4.451 C 8.397 4.486 7.866 4.52 7.337 4.59 C 6.525 4.697 5.713 4.839 5.043 5.157 C 3.737 5.687 2.853 6.817 2.853 8.476 C 2.853 10.562 4.195 11.621 5.891 11.621 C 6.455 11.621 6.914 11.549 7.337 11.445 C 8.009 11.232 8.573 10.843 9.244 10.136 C 9.632 10.666 9.739 10.915 10.409 11.48 C 10.586 11.549 10.763 11.549 10.903 11.445 C 11.327 11.091 12.07 10.455 12.457 10.102 C 12.634 9.96 12.599 9.748 12.492 9.573 C 12.104 9.078 11.715 8.653 11.715 7.7 L 11.715 4.52 C 11.715 3.178 11.822 1.942 10.833 1.024 C 10.022 0.283 8.75 0 7.761 0 L 7.337 0 C 5.537 0.104 3.631 0.882 3.206 3.108 C 3.135 3.391 3.348 3.496 3.489 3.531 L 5.467 3.779 C 5.678 3.743 5.785 3.566 5.819 3.391 C 5.995 2.614 6.631 2.225 7.337 2.153 L 7.479 2.153 C 7.903 2.153 8.362 2.33 8.609 2.684 C 8.891 3.108 8.856 3.673 8.856 4.168 L 8.856 4.451 Z" fill="hsl(215, 14%, 24%)"/>
-          <path d="M 15.998 11.982 L 15.998 11.981 C 15.991 11.815 15.956 11.688 15.886 11.582 L 15.879 11.572 L 15.87 11.561 C 15.8 11.484 15.732 11.455 15.659 11.423 C 15.439 11.338 15.12 11.293 14.737 11.292 C 14.461 11.292 14.157 11.319 13.851 11.385 L 13.85 11.365 L 13.543 11.467 L 13.537 11.47 L 13.363 11.527 L 13.363 11.534 C 13.159 11.619 12.974 11.724 12.802 11.849 C 12.694 11.929 12.606 12.036 12.601 12.199 C 12.598 12.287 12.643 12.389 12.718 12.449 C 12.792 12.509 12.879 12.53 12.955 12.53 C 12.973 12.53 12.99 12.529 13.005 12.526 L 13.02 12.525 L 13.031 12.523 C 13.182 12.491 13.401 12.47 13.658 12.434 C 13.878 12.409 14.111 12.392 14.313 12.392 C 14.456 12.391 14.585 12.401 14.674 12.42 C 14.718 12.429 14.751 12.44 14.769 12.45 C 14.775 12.452 14.78 12.455 14.783 12.456 C 14.786 12.469 14.792 12.501 14.791 12.545 C 14.793 12.714 14.722 13.029 14.623 13.336 C 14.527 13.642 14.41 13.95 14.333 14.154 C 14.314 14.201 14.302 14.253 14.302 14.31 C 14.3 14.392 14.334 14.491 14.405 14.557 C 14.475 14.623 14.565 14.649 14.641 14.649 L 14.644 14.649 C 14.757 14.648 14.853 14.603 14.936 14.538 C 15.717 13.836 15.989 12.714 16 12.083 L 15.998 11.982 Z M 13.683 12.955 C 13.603 12.954 13.521 12.973 13.445 13.009 C 13.359 13.043 13.272 13.082 13.189 13.117 L 13.068 13.168 L 12.91 13.231 L 12.91 13.233 C 11.193 13.929 9.389 14.338 7.721 14.374 C 7.659 14.376 7.597 14.376 7.538 14.376 C 4.913 14.377 2.772 13.16 0.612 11.96 C 0.537 11.92 0.459 11.899 0.384 11.899 C 0.287 11.899 0.187 11.936 0.115 12.004 C 0.042 12.072 -0.001 12.171 0 12.272 C -0.001 12.403 0.07 12.523 0.168 12.601 C 2.196 14.362 4.418 15.998 7.406 16 C 7.465 16 7.524 15.998 7.583 15.997 C 9.484 15.955 11.634 15.312 13.303 14.264 L 13.313 14.257 C 13.532 14.126 13.75 13.977 13.956 13.813 C 14.084 13.718 14.172 13.569 14.172 13.415 C 14.167 13.141 13.934 12.955 13.683 12.955 Z" fill="hsl(0, 0%, 100%)"/>
-        </g>
-      </symbol>
+    <div class="hero-wrapper">
+        <nav class="top-nav">
+            <div class="brand-logo">Skiff Mail</div>
+            <div class="hero-number">01</div>
+        </nav>
 
-      <symbol id="apple" viewBox="0 0 16 16">
-        <path fill="currentcolor" d="M 10.457 2.551 C 11.04 1.875 11.434 0.934 11.326 -0.003 C 10.485 0.029 9.468 0.534 8.866 1.209 C 8.324 1.808 7.852 2.766 7.979 3.684 C 8.917 3.754 9.874 3.228 10.457 2.551 M 12.56 8.496 C 12.583 10.918 14.776 11.724 14.8 11.734 C 14.783 11.791 14.45 12.882 13.645 14.01 C 12.948 14.985 12.226 15.955 11.088 15.976 C 9.97 15.996 9.61 15.341 8.331 15.341 C 7.053 15.341 6.653 15.955 5.595 15.996 C 4.497 16.035 3.659 14.941 2.958 13.97 C 1.522 11.984 0.426 8.356 1.899 5.908 C 2.63 4.694 3.937 3.923 5.355 3.904 C 6.434 3.884 7.452 4.599 8.112 4.599 C 8.771 4.599 10.009 3.739 11.31 3.866 C 11.854 3.887 13.384 4.076 14.364 5.452 C 14.285 5.499 12.54 6.472 12.56 8.496"/>
-      </symbol>
-
-      <symbol id="caret-right" viewBox="0 0 16 16">
-        <polyline fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" points="6 4,10 8,6 12"/>
-      </symbol>
-
-      <symbol id="close" viewBox="0 0 16 16">
-        <g stroke="currentcolor" stroke-width="1">
-          <polyline points="1 1,15 15"/>
-          <polyline points="1 15,15 1"/>
-        </g>
-      </symbol>
-
-      <symbol id="fake-refresh" viewBox="0 0 32 32">
-        <rect fill="var(--gray700)" rx="8" ry="8" width="32" height="32"/>
-        <path fill="hsl(0, 0%, 100%)" d="M 7.996 0.765 C 7.997 0.316 8.483 0.037 8.871 0.261 C 8.885 0.269 8.899 0.278 8.911 0.286 L 12.356 2.671 C 12.692 2.903 12.692 3.399 12.356 3.63 L 8.911 6.015 C 8.543 6.271 8.035 6.031 7.998 5.584 C 7.997 5.568 7.996 5.553 7.996 5.537 L 7.996 3.734 C 3.808 3.734 1.19 8.269 3.284 11.896 C 5.378 15.524 10.614 15.524 12.708 11.896 C 13.186 11.069 13.437 10.13 13.437 9.175 C 13.437 8.577 14.086 8.203 14.603 8.502 C 14.844 8.641 14.992 8.898 14.992 9.175 C 14.992 14.561 9.162 17.927 4.498 15.234 C -0.166 12.541 -0.166 5.809 4.498 3.116 C 5.561 2.502 6.768 2.179 7.996 2.179 L 7.996 0.765 Z" transform="matrix(0, 1, -1, 0, 24, 8)"/>
-      </symbol>
-
-      <symbol id="google" viewBox="0 0 16 16">
-        <path fill="currentcolor" d="M 8.311 7.279 L 8.311 9.464 L 13.535 9.464 C 13.449 10.533 13.012 11.486 12.341 12.222 L 12.344 12.218 C 11.372 13.208 10.021 13.822 8.526 13.822 C 8.45 13.822 8.375 13.82 8.3 13.817 L 8.311 13.817 C 5.145 13.816 2.58 11.25 2.58 8.084 C 2.58 8.056 2.58 8.029 2.58 8.003 L 2.58 8.007 C 2.58 7.984 2.58 7.957 2.58 7.93 C 2.58 4.764 5.145 2.198 8.311 2.196 C 8.332 2.196 8.357 2.196 8.383 2.196 C 9.885 2.196 11.248 2.792 12.249 3.761 L 12.247 3.76 L 13.785 2.222 C 12.417 0.85 10.526 0 8.436 0 C 8.392 0 8.349 0.001 8.305 0.001 L 8.311 0.001 C 8.31 0.001 8.309 0.001 8.307 0.001 C 3.869 0.001 0.263 3.567 0.2 7.991 L 0.2 7.997 C 0.263 12.427 3.869 15.994 8.307 15.994 C 8.309 15.994 8.31 15.994 8.312 15.994 C 8.402 15.997 8.507 16 8.613 16 C 10.685 16 12.556 15.14 13.889 13.757 L 13.891 13.755 C 15.067 12.473 15.787 10.758 15.787 8.874 C 15.787 8.794 15.786 8.714 15.783 8.635 L 15.784 8.646 C 15.784 8.618 15.784 8.583 15.784 8.549 C 15.784 8.1 15.742 7.66 15.661 7.234 L 15.668 7.278 L 8.311 7.279 Z"/>
-      </symbol>
-
-      <symbol id="hamburger" viewBox="0 0 32 32">
-        <g fill="none" stroke="currentcolor" stroke-width="4">
-          <polyline points="0 2,32 2"/>
-          <polyline points="0 10,32 10"/>
-        </g>
-        <text fill="currentcolor" font-size="11" text-anchor="middle" x="16" y="29">Menu</text>
-      </symbol>
-
-      <symbol id="lock" viewBox="0 0 24 24">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.5907 10.348 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.40931 10.348 4.13525 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8ZM14 16C14 17.1046 13.1046 18 12 18C10.8954 18 10 17.1046 10 16C10 14.8954 10.8954 14 12 14C13.1046 14 14 14.8954 14 16Z" fill="currentcolor"/>
-      </symbol>
-
-      <symbol id="logo" viewBox="0 0 16 16">
-        <g fill="currentcolor">
-          <path d="M 8.933 0.206 C 8.933 0.206 8.404 0.14 7.973 0.631 C 7.534 1.131 7.449 2.12 7.377 2.586 L 6.493 8.186 C 6.446 8.652 6.758 9.013 7.087 9.286 C 7.364 9.516 7.68 9.585 8.147 9.585 L 11.413 9.585 C 11.879 9.585 12.115 9.537 12.448 9.338 C 12.744 9.162 13.023 8.675 13.023 8.675 C 13.237 8.282 15.08 3.234 15.08 3.234 C 15.251 2.798 15.598 1.771 15.381 1.138 C 15.237 0.717 14.863 0.275 14.396 0.244 C 9.2 0.2 8.933 0.206 8.933 0.206 Z"/>
-          <path d="M 1.684 5.619 C 1.684 5.619 0.743 5.593 0.607 6.839 L 0.453 10.567 C 0.437 11.033 0.541 11.28 0.949 11.621 C 1.244 11.868 2.006 11.887 2.006 11.887 C 2.006 11.887 3.308 11.917 3.705 11.875 C 4.237 11.819 4.749 11.195 4.827 10.729 L 5.33 7.486 C 5.408 7.019 5.53 6.371 5.144 6.029 C 4.624 5.568 4.244 5.619 3.777 5.619 L 1.684 5.619 Z"/>
-          <path d="M 5.803 12.534 L 5.479 14.571 C 5.387 15.295 5.877 15.69 6.343 15.768 L 7.796 15.78 C 8.317 15.766 8.608 15.606 8.825 15.081 L 9.803 12.392 C 10.029 11.565 9.819 11.182 9.023 11.152 C 9.023 11.152 7.874 11.102 7.029 11.126 C 5.952 11.156 5.803 12.534 5.803 12.534 Z"/>
-        </g>
-      </symbol>
-
-      <symbol id="netflix" viewBox="0 0 16 16">
-        <circle fill="hsl(0, 0%, 0%)" cx="8" cy="8" r="8"/>
-        <g fill="hsl(357, 93%, 36%)">
-          <path d="M 8.79 3.01 L 8.79 5.22 L 8.79 7.42 L 8.61 6.91 L 8.37 11.83 C 8.6 12.48 8.72 12.83 8.72 12.84 C 8.72 12.84 8.86 12.84 9.02 12.85 C 9.5 12.87 10.09 12.92 10.55 12.98 C 10.65 13 10.74 13 10.75 13 C 10.75 12.99 10.76 10.74 10.75 8 L 10.75 3.01 L 8.79 3.01 Z"/>
-          <path d="M 5.25 3 L 5.25 8 C 5.25 10.74 5.25 12.99 5.26 13 C 5.26 13 5.43 12.98 5.64 12.96 C 5.84 12.94 6.12 12.91 6.26 12.9 C 6.48 12.88 7.12 12.84 7.2 12.84 C 7.23 12.84 7.23 12.73 7.23 10.72 L 7.23 8.6 L 7.39 9.05 C 7.41 9.12 7.42 9.14 7.44 9.21 L 7.67 4.29 C 7.63 4.15 7.66 4.22 7.6 4.06 C 7.41 3.52 7.24 3.06 7.24 3.04 L 7.23 3 L 5.25 3 Z"/>
-        </g>
-      </symbol>
-
-      <symbol id="spotify" viewBox="0 0 48 48">
-        <circle fill="hsl(0, 0%, 0%)" cx="24" cy="24" r="22"/>
-        <path fill="hsl(145, 100%, 43%)" d="M 38.16 21.36 C 30.48 16.8 17.64 16.32 10.32 18.6 C 9.12 18.96 7.92 18.24 7.56 17.16 C 7.2 15.96 7.92 14.76 9 14.4 C 17.52 11.88 31.56 12.36 40.44 17.64 C 41.52 18.24 41.88 19.68 41.28 20.76 C 40.68 21.6 39.24 21.96 38.16 21.36"/>
-      </symbol>
-
-      <symbol id="uber" viewBox="0 0 192 192">
-        <circle fill="hsl(0, 0% ,0%)" cx="96" cy="96" r="96"></circle>
-        <g fill="none" stroke="hsl(0, 0%, 100%)" stroke-linecap="round" stroke-width="8">
-          <path d="M54.24 119.13v-32.9m13.84 32.9V72.87"/>
-          <circle cx="84.53" cy="102.68" r="16.45"/>
-          <path d="M160.22 119.13V87.99m11.78 0h0c-1.9 0-3.77.45-5.45 1.32-2.73 1.42-6.33 3.97-6.33 7.51"/>
-          <g stroke-linejoin="round">
-            <path d="M20 72.87v31.73c.77 8.11 8.14 14.41 16.88 14.52 8.91.12 16.58-6.25 17.36-14.52V72.87"/>
-            <path d="M142.57 113.99c-3 3.17-7.24 5.14-11.95 5.14-9.09 0-16.45-7.37-16.45-16.45s7.37-16.45 16.45-16.45 16.45 7.37 16.45 16.45h-32.9"/>
-          </g>
-        </g>
-      </symbol>
-    </svg>
-
-    <!-- Header, hero, widgets, footer markup (unchanged structure; tuned classes for v6 sizing) -->
-    <header>
-      <a class="logo" href="/" aria-label="SpamSlam home">
-        <svg class="icon" aria-hidden="true"><use href="#logo"></use></svg>
-        SPAMSLAM
-      </a>
-
-      <nav id="main-nav" class="main-nav" aria-hidden="false">
-        <ul>
-          <li><a href="/about">About</a></li>
-          <li><a href="/privacy-promise-seal">Privacy Promise</a></li>
-          <li><a href="/media">Media</a></li>
-          <li><a href="/blog">Blog</a></li>
-        </ul>
-      </nav>
-
-      <div class="btn-block">
-        <a id="try-it" class="btn" href="/dashboard">Try it</a>
-        <button id="menu-open" class="btn btn--square btn--mobile" title="Menu" aria-label="Menu">
-          <svg class="icon" aria-hidden="true"><use href="#hamburger"></use></svg>
-        </button>
-      </div>
-    </header>
-
-    <main>
-      <article>
-        <section class="hero">
-          <h1 class="hero__title">Too many companies have been collecting too much information about us.</h1>
-          <p class="hero__subtitle">Tired of hitting ‘unsubscribe’ only to get even more spam? With SPAMSLAM AI, that ends today.</p>
-
-          <div class="locks" aria-hidden="true">
-            <div class="locks__dot"></div>
-            <div class="locks__line"></div>
-            <div class="locks__dot locks__dot--lg"></div>
-            <div class="locks__line"></div>
-            <div class="locks__center-dot"><svg class="icon"><use href="#lock"></use></svg></div>
-            <div class="locks__line"></div>
-            <div class="locks__dot locks__dot--lg"></div>
-            <div class="locks__line"></div>
-            <div class="locks__dot"></div>
-          </div>
-        </section>
-
-        <hr>
-
-        <div class="widgets" role="region" aria-label="Widgets">
-          <section id="spam-counter-widget" class="widget widget--entering widget--left" role="group">
-            <span class="widget__badge">Turn spam into silence</span>
-
-            <div class="left__icon-top" aria-hidden="true">
-              <svg class="icon" width="36" height="36"><use href="#envelope"></use></svg>
-            </div>
-
-            <div id="spam-counter-root" class="widget__content spam-counter-content" aria-live="polite">
-              <div class="widget__amount widget__amount--lg">
-                <span class="widget__value">--</span>
-              </div>
-
-              <div class="widget__label">Websites spamming you — total of</div>
-
-              <div class="left__bottom-row">
-                <div class="left__sites" aria-hidden="true">
-                  <svg class="icon" width="16" height="16"><use href="#envelope"></use></svg>
-                  <span class="widget__value small" id="sites-linked">--</span>
-                  <span class="widget__muted">websites linked to your email</span>
+        <div class="nav-pill-wrapper">
+            <div class="nav-pill">
+                <div class="pill-logo">
+                    <svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                
+                <div class="nav-item">
+                    Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>Mail</h4><p>Encrypted email</p></div></a>
+                        <a href="#" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Pages</h4><p>Private docs</p></div></a>
+                    </div>
                 </div>
 
-                <div class="left__graph">
-                  <svg viewBox="0 0 120 40" class="sparkline" aria-hidden="true">
-                    <polyline points="0,30 16,28 32,20 48,24 64,18 80,12 96,8 112,6 120,4" fill="none" stroke="currentColor" stroke-width="2"/>
-                  </svg>
+                <!-- UPDATED RESOURCES DROPDOWN -->
+                <div class="nav-item">
+                    Resources <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu" style="width: 240px;">
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon" style="background:transparent; color:#888; border:1px solid #444;"><i class="fa-regular fa-file"></i></div>
+                            <div class="dd-info" style="color:white;"><h4>Whitepaper</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon" style="background:transparent; color:#888; border:1px solid #444;"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <div class="dd-info" style="color:white;"><h4>Privacy policy</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon" style="background:transparent; color:#888; border:1px solid #444;"><i class="fa-regular fa-clock"></i></div>
+                            <div class="dd-info" style="color:white;"><h4>Changelog</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon" style="background:transparent; color:#888; border:1px solid #444;"><i class="fa-regular fa-circle-question"></i></div>
+                            <div class="dd-info" style="color:white;"><h4>Help</h4></div>
+                        </a>
+                    </div>
                 </div>
-              </div>
             </div>
-          </section>
-
-          <section class="widget widget--entering widget--center widget--centered" role="group">
-            <h3 class="widget__title">Turn spam into silence</h3>
-
-            <div class="center__toggle" aria-hidden="true">
-              <label class="switch">
-                <span class="switch__sr-text">Connect</span>
-                <input class="switch__input" type="checkbox" checked aria-label="Connect" />
-              </label>
-            </div>
-
-            <div class="widget__circle-wrap center__circles" aria-hidden="true">
-              <div class="widget__circle widget__circle--bc widget__circle--bc1"></div>
-              <div class="widget__circle widget__circle--bc widget__circle--bc2"></div>
-              <div class="widget__circle widget__circle--bc widget__circle--bc3"></div>
-            </div>
-
-            <div class="center__icons" aria-hidden="true">
-              <div class="source-icon"><svg class="icon"><use href="#spotify"></use></svg></div>
-              <div class="source-icon"><svg class="icon"><use href="#uber"></use></svg></div>
-              <div class="source-icon"><svg class="icon"><use href="#amazon"></use></svg></div>
-              <div class="source-icon"><svg class="icon"><use href="#netflix"></use></svg></div>
-            </div>
-
-            <div class="center__cta">
-              <a class="btn btn--apple center__beta" href="./dashboard" target="_blank" rel="noopener noreferrer">
-                <svg class="icon"><use href="#apple"></use></svg>
-                <span class="btn__label-group"><small>TRY NOW</small><span class="btn__label">BETA VERSION</span></span>
-              </a>
-            </div>
-          </section>
-
-          <section class="widget widget--entering widget--right" role="group">
-            <div class="right__badge-icon" aria-hidden="true">
-              <svg class="icon" width="28" height="28"><use href="#fake-refresh"></use></svg>
-            </div>
-
-            <div class="right__bubbles" aria-hidden="true">
-              <div class="bubble bubble--dark">Any products I should be interested in?</div>
-              <div class="bubble bubble--light">Where do I mostly shop during the winter?</div>
-              <div class="bubble bubble--light small">How much money have I saved on discounts?</div>
-            </div>
-
-            <div class="widget__title right__title">Learn more from your data and make better decisions</div>
-
-            <button class="btn btn--square right__arrow" aria-label="Learn more">
-              <svg class="icon"><use href="#caret-right"></use></svg>
-            </button>
-          </section>
-        </div>
-      </article>
-    </main>
-
-    <nav id="mobile-nav" class="nav mobile-nav" data-mobile="true" aria-hidden="true">
-      <div class="btn-block">
-        <button id="nav-close" class="btn btn--square btn--mobile" aria-label="Close"><svg class="icon"><use href="#close"></use></svg></button>
-      </div>
-      <ul>
-        <li><a href="/about">About</a></li>
-        <li><a href="/privacy-promise-seal">Privacy Promise</a></li>
-        <li><a href="/media">Media</a></li>
-        <li><a href="/blog">Blog</a></li>
-      </ul>
-      <div class="btn-block">
-        <a id="nav-try" class="btn" href="/dashboard">Try it</a>
-      </div>
-    </nav>
-    <div class="backdrop" id="nav-backdrop" aria-hidden="true"></div>
-
-    <!-- Footer (more creative design) -->
-    <footer class="site-footer" role="contentinfo">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <a class="logo" href="/">
-            <svg class="icon" aria-hidden="true"><use href="#logo"></use></svg>
-            SPAMSLAM
-          </a>
-          <p class="footer-tag">Take back your inbox. Respect privacy. Reduce noise.</p>
         </div>
 
-        <div class="footer-links">
-          <ul>
-          <li><a href="./privacy-policy">Privacy Policy</a></li>
-            <li><a href="./responsible-ai">Responsible AI</a></li>
-            <li><a href="./dpa">DPA</a></li>
-            <li><a href="./cookie-policy">Cookie Policy</a></li>
-            <li><a href="./terms">Terms</a></li>
-          </ul>
+        <div class="hero-content">
+            <h1 class="hero-title">Private, End-to-End<br>Encrypted <span class="title-icon"><i class="fa-solid fa-envelope" style="color:white; font-size:28px;"></i></span> Mail</h1>
+            <p class="hero-desc">Skiff Mail protects your inbox by keeping your messages end-to-end encrypted. That means that no one but you has access to your data.</p>
+        </div>
+    </div>
+
+    <!-- App Mockup -->
+    <div class="app-mockup">
+        <div class="app-sidebar">
+            <div class="user-profile"><i class="fa-solid fa-envelope-open-text user-profile-icon"></i><div><h3 style="font-size:14px;">Skiff Mail</h3><span style="font-size:12px;color:#888;">Nightwatch</span></div></div>
+            <button class="btn-compose"><i class="fa-solid fa-pen-nib"></i> Compose</button>
+            <div class="sidebar-menu">
+                <div class="menu-item active"><i class="fa-solid fa-inbox"></i> Inbox</div>
+                <div class="menu-item"><i class="fa-regular fa-paper-plane"></i> Sent</div>
+                <div class="menu-item"><i class="fa-regular fa-file"></i> Draft</div>
+            </div>
+        </div>
+        <div class="app-inbox">
+            <div class="inbox-header">Inbox <span class="inbox-count">12</span></div>
+            <div class="email-row checked"><div class="row-checkbox"></div><div class="row-avatar" style="background:#E1BEE7;">🤖</div><div class="row-content"><div class="row-sender">Heinrich</div><div class="row-subject">Update to engineering status</div></div></div>
+            <div class="email-row checked"><div class="row-checkbox"></div><div class="row-avatar" style="background:#222;color:white;">🐼</div><div class="row-content"><div class="row-sender">Angelina</div><div class="row-subject">Product strategy sync</div></div></div>
+            <div class="email-row"><div class="row-checkbox"></div><div class="row-avatar" style="background:#FFF9C4;">🐱</div><div class="row-content"><div class="row-sender">Jason, Sunny</div><div class="row-subject">Rewind Feature Eng Sync</div></div></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div style="margin-top: 80px;">
+        <div class="mission-statement">
+            <h2 class="mission-title">Skiff Mail is <span class="highlight">end-to-end encrypted</span> email that protects your inbox.</h2>
         </div>
 
-        <div class="footer-contact">
-          <a class="footer-email" href="mailto:support@spamslam.org">support@spamslam.org</a>
-          <p class="footer-small">© <span id="year"></span> SpamSlam — All rights reserved</p>
-        </div>
-      </div>
+        <!-- NEW: MINE DASHBOARD SECTION -->
+        <div class="dashboard-container" id="dashboardSection">
+            <!-- Sidebar -->
+            <div class="dash-sidebar">
+                <span class="dash-nav-item active">Overview</span>
+                <span class="dash-nav-item">My footprint</span>
+                <span class="dash-nav-item">My reclaims</span>
+                <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+                <span class="dash-nav-item">Spread the word</span>
+                <span class="dash-nav-item">Blog</span>
+            </div>
 
-      <!-- decorative footer artwork -->
-      <div class="footer-art">
-        <svg viewBox="0 0 800 120" preserveAspectRatio="none" class="footer-wave" aria-hidden="true">
-          <defs>
-            <linearGradient id="gWave" x1="0" x2="1">
-              <stop offset="0%" stop-color="rgba(0,0,0,0.03)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
-            </linearGradient>
-          </defs>
-          <path d="M0,40 C200,120 400,0 800,60 L800,120 L0,120 Z" fill="url(#gWave)"></path>
-        </svg>
-      </div>
+            <!-- Content -->
+            <div class="dash-content">
+                <div class="dash-header">
+                    <h2 class="dash-welcome">Welcome Michael!</h2>
+                    <div class="dash-top-stats">
+                        <div><i class="fa-regular fa-eye"></i> 235 Companies</div>
+                        <div><i class="fa-solid fa-check-double"></i> 0 Completed</div>
+                    </div>
+                </div>
+
+                <div class="dash-grid">
+                    <!-- Card 1: Improve -->
+                    <div class="dash-card card-improve">
+                        <h3>It's time to improve your score</h3>
+                        <p>Decide which companies you need and reclaim the ones you don't</p>
+                        <button class="btn-mine-action">Take action</button>
+                        <!-- Visual representation of net/ghosts -->
+                        <div style="position:absolute; right:10px; bottom:10px; opacity:0.6;">
+                            <i class="fa-solid fa-ghost" style="font-size:24px; color:#999; transform: translate(-40px, -20px);"></i>
+                            <i class="fa-solid fa-ghost" style="font-size:18px; color:#999; transform: translate(-10px, -50px);"></i>
+                            <i class="fa-solid fa-net" style="font-size:50px; color:#333;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Companies Count -->
+                    <div class="dash-card card-companies">
+                        <div class="big-count-wrapper">
+                            <div>
+                                <span class="count-number counter" data-target="235">0</span>
+                                <p class="count-label">companies holding your data were found in your footprint</p>
+                            </div>
+                            <i class="fa-solid fa-parachute-box illustration-balloon"></i>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:20px;">
+                            <button class="btn-outline-purple">See which companies</button>
+                            <span style="color:var(--mine-purple); font-size:13px; cursor:pointer;"><i class="fa-solid fa-arrow-up-from-bracket"></i> Share</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Gauge Progress -->
+                    <div class="dash-card card-progress">
+                        <h4 style="width:100%; font-size:16px; font-weight:600; margin-bottom:10px;">Your data ownership progress</h4>
+                        <div class="gauge-container">
+                            <svg class="gauge-svg" viewBox="0 0 200 200">
+                                <circle class="gauge-bg" cx="100" cy="100" r="90"></circle>
+                                <circle class="gauge-fill" cx="100" cy="100" r="90"></circle>
+                            </svg>
+                            <div class="gauge-center-text">
+                                <div class="gauge-percent"><span class="counter" data-target="10">0</span>%</div>
+                                <div class="gauge-sub">actions taken <i class="fa-solid fa-circle-info" style="font-size:10px;"></i></div>
+                            </div>
+                        </div>
+                        <div style="width:100%; display:flex; justify-content:space-between; font-size:11px; color:#999;">
+                            <span>0%</span><span>100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Activity Stats -->
+                    <div class="dash-card card-activity">
+                        <h4>Your activity <select class="date-select"><option>Last 7 days</option></select></h4>
+                        
+                        <div class="stats-row">
+                            <div class="stat-item">
+                                <span class="stat-val counter" data-target="5">0</span>
+                                <span class="stat-label">New companies</span>
+                                <div class="stat-bar" style="width:0;" data-width="80%"></div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-val counter" data-target="24">0</span>
+                                <span class="stat-label">Data reclaims</span>
+                                <div class="stat-bar" style="width:0;" data-width="60%"></div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-val counter" data-target="1">0</span>
+                                <span class="stat-label">Marked as needed</span>
+                                <div class="stat-bar" style="width:0;" data-width="30%"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; font-size:12px; color:#888;">Keep track of your latest activity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END DASHBOARD SECTION -->
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-text"><h3>Add your custom domain</h3><p>Customize your email address in one click with a privacy-first Skiff Domain.</p></div>
+                <div class="mockup-domains">
+                    <div class="domain-row"><div><i class="fa-solid fa-circle-check" style="color:#66BB6A;"></i> <b>gilmoregirl.com</b></div> <span style="font-size:10px; background:#FFEBEE; color:red; padding:3px;">DEFAULT</span></div>
+                    <div class="domain-row"><div><i class="fa-solid fa-circle-check" style="color:#66BB6A;"></i> <b>diffiecube.com</b></div></div>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-text"><h3>Unlimited aliases</h3><p>Add, manage, and delete aliases to keep your identity completely private.</p></div>
+                <div class="mockup-compose"><div class="comp-win"><div>To: <b>Receiver</b></div><hr style="border:0; border-top:1px solid #eee; margin:10px 0;"><div style="color:var(--color-blue-brand);">From: joseph@skiff.com</div><p style="margin-top:15px; color:#666;">Hey Diff...</p></div></div>
+            </div>
+        </div>
+
+        <!-- Open Source Section -->
+        <div class="opensource-section">
+            <div>
+                <h2 class="os-title">Transparent and completely <br><span class="text-yellow">open source</span></h2>
+                <p style="color:#aaa; line-height:1.6; margin-bottom:30px;">Privacy is more than a promise. Anyone can verify our encryption protocols.</p>
+                <a href="#" class="btn-dark-outline"><i class="fa-brands fa-github"></i> View on GitHub</a>
+            </div>
+            <div style="flex:1; background:black; padding:20px; border-radius:10px; font-family:'JetBrains Mono'; font-size:12px; border:1px solid #333;">
+                <span style="color:#4BBDF6;">const</span> <span style="color:white;">salt</span> = <span style="color:#66BB6A;">srp</span>.generateSalt();<br>
+                <span style="color:#4BBDF6;">const</span> <span style="color:white;">key</span> = <span style="color:#4BBDF6;">await</span> createKey(<span style="color:white;">password</span>);
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div style="width:200px;"><b>MailRoom</b><br><span style="font-size:12px; color:#888;">© 2025. All rights reserved.</span></div>
+            <div class="footer-cols">
+                <div class="f-col"><h5>Products</h5><ul><li>Mail</li><li>Pages</li></ul></div>
+                <div class="f-col"><h5>Legal</h5><ul><li>Privacy</li><li>Terms</li></ul></div>
+            </div>
+        </div>
     </footer>
-  </div>
 
-  <script type="module" src="./script.js"></script>
-  <script>document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());</script>
+    <!-- INTERACTIVITY SCRIPT -->
+    <script>
+        // Options for the observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.4 // Trigger when 40% of the dashboard is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const container = entry.target;
+                    container.classList.add('visible');
+                    
+                    // 1. Animate Counters
+                    const counters = container.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        animateValue(counter, 0, target, 2000);
+                    });
+
+                    // 2. Animate Gauge (Stroke Offset)
+                    // Circumference is ~565. We want to show 10% on a half circle (which is technically 20% of the full SVG circle logic here for visual)
+                    // But visual logic: 10% of 100% scale.
+                    // Full empty offset = 565.
+                    // We want to fill slightly. 
+                    const gaugeFill = container.querySelector('.gauge-fill');
+                    if(gaugeFill) {
+                        // Calculate offset. 565 is hidden. 
+                        // To show 10% of the half-arch: 
+                        // The SVG is rotated so we are only seeing half.
+                        // Let's just approximate the visual fill for "10%"
+                        const targetOffset = 565 - (565 * 0.10) / 2; // Divide by 2 because it's a half circle view
+                        gaugeFill.style.strokeDashoffset = targetOffset; 
+                    }
+
+                    // 3. Animate Bar Lines
+                    const bars = container.querySelectorAll('.stat-bar');
+                    bars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width;
+                    });
+
+                    // Stop observing once triggered
+                    observer.unobserve(container);
+                }
+            });
+        }, observerOptions);
+
+        // Target the dashboard container
+        const dashboardSection = document.getElementById('dashboardSection');
+        if (dashboardSection) {
+            observer.observe(dashboardSection);
+        }
+
+        // Helper function to count numbers up
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+
 </body>
 </html>
