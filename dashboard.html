@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SpamSlam Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT NAV -->
+    <aside class="sidebar">
+      <div class="logo-row">
+        <div class="logo-mark">SS</div>
+        <div class="brand">SpamSlam</div>
+      </div>
+      <nav class="side-nav">
+        <a class="active">Overview</a>
+        <a>My footprint</a>
+        <a>My reclaims</a>
+        <hr/>
+        <a>Spread the word</a>
+        <a>Blog</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="welcome">
+          <h1>Welcome Michael!</h1>
+        </div>
+        <div class="top-actions">
+          <div class="top-stats">
+            <div class="stat"><svg viewBox="0 0 24 24"><path d="M12 4.5C7.305 4.5 3.268 7.065 1 11.25C3.268 15.435 7.305 18 12 18s8.732-2.565 11-6.75C20.732 7.065 16.695 4.5 12 4.5z"></path><circle cx="12" cy="11.25" r="2.25"/></svg><span id="topCompanies">235</span> Companies</div>
+            <div class="dot"></div>
+            <div class="stat small">0 Completed</div>
+          </div>
+
+          <div class="profile">
+            <img src="" alt="avatar" id="avatar" />
+            <div class="profile-name">Michael Perrigo <span class="caret">▾</span></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- GRID: Left column narrow + content -->
+      <section class="content">
+        <!-- top cards row -->
+        <div class="cards-row">
+          <div class="card card-cta">
+            <h2>It's time to improve your score</h2>
+            <p>Decide which companies you need and reclaim the ones you don't</p>
+            <div class="card-cta-actions">
+              <button class="btn primary" id="takeActionBtn">Take action</button>
+            </div>
+          </div>
+
+          <div class="card card-summary">
+            <div class="big-num" id="companiesBig">235</div>
+            <div class="card-summary-text">companies holding your data were found in your footprint</div>
+            <div class="card-summary-actions">
+              <button class="btn outline" id="seeCompanies">See which companies</button>
+              <button class="icon-btn" id="shareBtn" title="Share">⤴</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- second row small cards -->
+        <div class="cards-row smalls">
+          <div class="card card-progress">
+            <h3>Your data ownership progress</h3>
+            <div class="gauge">
+              <svg width="220" height="120" viewBox="0 0 220 120"><defs></defs>
+                <path class="g-bg" d="M20 100 A80 80 0 0 1 200 100" fill="none" stroke="#eee" stroke-width="18" stroke-linecap="round"></path>
+                <path class="g-fill" d="M20 100 A80 80 0 0 1 95 40" fill="none" stroke="#7c5cff" stroke-width="18" stroke-linecap="round"></path>
+                <text x="110" y="78" text-anchor="middle" class="g-percent">10%</text>
+              </svg>
+            </div>
+            <div class="small-footer">actions taken</div>
+          </div>
+
+          <div class="card card-activity">
+            <h3>Your activity</h3>
+            <div class="activity-grid">
+              <div class="activity-item">
+                <div class="big">5</div>
+                <div class="label">New companies</div>
+              </div>
+              <div class="activity-item">
+                <div class="big">24</div>
+                <div class="label">Data reclaims</div>
+              </div>
+              <div class="activity-item">
+                <div class="big">1</div>
+                <div class="label">Marked as needed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Companies toolbar -->
+        <div class="panel toolbar">
+          <div class="left">
+            <div class="search-wrap">
+              <input id="searchInput" placeholder="Search companies or sender..." />
+            </div>
+            <select id="sortSelect" class="select">
+              <option value="freq">Sort: Frequent</option>
+              <option value="recent">Sort: Recent</option>
+              <option value="alpha">Sort: A → Z</option>
+            </select>
+
+            <div class="bulk">
+              <label><input type="checkbox" id="selectAll"/> All</label>
+              <button class="btn small" id="bulkUnsub">Unsubscribe</button>
+              <button class="btn small" id="bulkDelete">Request Deletion</button>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="pagination" id="paginationWrap"></div>
+          </div>
+        </div>
+
+        <!-- Companies grid -->
+        <div id="companiesGrid" class="companies-grid"></div>
+
+        <!-- bottom pagination -->
+        <div class="pager" id="pagerBottom"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" aria-hidden="true"></div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
