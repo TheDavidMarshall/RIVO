@@ -10,6 +10,7 @@
   --maxw: 1200px;
   --text: #0f172a;
   --glass: rgba(255,255,255,0.85);
+  --transition: 180ms cubic-bezier(.2,.9,.2,1);
 }
 
 *{box-sizing:border-box}
@@ -22,13 +23,14 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 .logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#111827,#4a63ee);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
 .brand{font-weight:700;font-size:18px}
 .side-nav{display:flex;flex-direction:column;gap:12px;color:var(--muted)}
-.side-nav a{cursor:pointer;padding:8px 6px;border-radius:8px;color:var(--muted);text-decoration:none}
+.side-nav a{cursor:pointer;padding:8px 6px;border-radius:8px;color:var(--muted);text-decoration:none;transition:color var(--transition)}
 .side-nav a.active{color:#7b61ff}
 
 /* MAIN */
 .main{flex:1;padding:28px 48px;max-width:calc(100% - 220px)}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .welcome h1{font-family:"Playfair Display", serif;font-size:36px;margin:0}
+.small.muted{color:var(--muted)}
 .top-actions{display:flex;align-items:center;gap:18px}
 .top-stats{display:flex;align-items:center;gap:12px;color:var(--muted)}
 .top-stats .stat{display:flex;align-items:center;gap:8px}
@@ -39,7 +41,8 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 
 /* CARDS ROWS */
 .cards-row{display:flex;gap:18px;margin-bottom:18px}
-.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:18px;flex:1}
+.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:18px;flex:1;transition:transform var(--transition),box-shadow var(--transition)}
+.card:hover{transform:translateY(-6px)}
 .card-cta{background:linear-gradient(180deg,#ecfdf7,#e9f8ff);min-height:140px;display:flex;flex-direction:column;justify-content:space-between}
 .card-cta h2{font-family:"Playfair Display",serif;margin:0;font-size:22px}
 .card-cta p{color:var(--muted);margin-top:8px}
@@ -48,7 +51,7 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 .big-num{font-family:"Playfair Display",serif;font-size:46px}
 .card-summary-text{color:var(--muted);margin-top:6px}
 .card-summary-actions{display:flex;gap:8px;align-items:center;margin-top:10px}
-.btn{border-radius:999px;padding:10px 14px;border:none;cursor:pointer;font-weight:600}
+.btn{border-radius:999px;padding:10px 14px;border:none;cursor:pointer;font-weight:600;transition:transform var(--transition)}
 .btn.primary{background:var(--purple);color:#fff;box-shadow:0 8px 24px rgba(124,92,255,0.12)}
 .btn.outline{background:transparent;border:1px solid rgba(124,92,255,0.12);color:var(--purple)}
 .icon-btn{background:transparent;border:0;padding:10px;font-size:16px;cursor:pointer}
@@ -63,7 +66,7 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 .activity-item .label{color:var(--muted);font-size:13px}
 
 /* TOOLBAR */
-.panel.toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:12px}
+.panel.toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:12px;background:transparent}
 .search-wrap input{padding:10px 12px;border-radius:10px;border:1px solid rgba(10,20,40,0.06);width:320px}
 .select{padding:10px;border-radius:10px;border:1px solid rgba(10,20,40,0.06);margin-left:12px}
 .bulk{display:inline-flex;gap:8px;align-items:center;margin-left:16px}
@@ -71,7 +74,8 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 
 /* COMPANIES GRID */
 .companies-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
-.company{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.company{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform var(--transition)}
+.company:hover{transform:translateY(-6px)}
 .company .top{display:flex;gap:12px;align-items:center}
 .logo-round{width:54px;height:54px;border-radius:10px;background:linear-gradient(90deg,#ffd28a,#8cc1ff);display:flex;align-items:center;justify-content:center}
 .logo-round img{width:100%;height:100%;object-fit:cover;border-radius:8px}
@@ -94,6 +98,9 @@ html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Se
 /* TOAST */
 .toast{position:fixed;right:20px;bottom:20px;background:#111827;color:white;padding:12px 16px;border-radius:8px;display:none}
 .toast.show{display:block}
+
+/* helpers */
+.hidden{display:none}
 
 /* Responsive */
 @media (max-width:1100px){
