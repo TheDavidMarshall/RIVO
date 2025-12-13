@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpamSlam - Simswap Protection</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 
+         * ==========================================
+         * 1. RESET & VARIABLES (Shared)
+         * ==========================================
+         */
+        :root {
+            --color-blue-brand: #4BBDF6;
+            --color-blue-dark: #3aa8db;
+            --color-orange: #FF5722;
+            --color-dark: #1F1F1F;
+            --color-beige: #F4F4F1;
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --auth-bg-dark: #1E1E1E;
+            --auth-bg-light: #F3F4F6;
+            --proton-purple: #6D4AFF;
+            --container-width: 1200px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--color-beige); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        ul { list-style: none; }
+
+        /* Typography */
+        .font-serif { font-family: 'DM Serif Display', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* 
+         * ==========================================
+         * 2. HEADER & HERO
+         * ==========================================
+         */
+        .hero-wrapper {
+            background-color: var(--color-blue-brand);
+            padding-bottom: 180px; /* Space for the mockup overlap */
+            position: relative;
+        }
+
+        .top-nav { display: flex; justify-content: space-between; padding: 32px 48px; position: relative; z-index: 10; }
+        .brand-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: rgba(255,255,255,0.9); text-transform: uppercase; }
+        .hero-number { font-family: 'DM Serif Display', serif; font-size: 80px; color: rgba(255,255,255,0.95); line-height: 1; }
+
+        /* Navigation Pill (Same as before) */
+        .nav-pill-wrapper { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); z-index: 100; }
+        .nav-pill { background: #1A1A1A; color: white; padding: 6px 24px 6px 6px; border-radius: 100px; display: flex; align-items: center; gap: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+        .pill-logo { width: 40px; height: 40px; background: linear-gradient(135deg, #FF7043, #E64A19); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .skiff-swirl { width: 20px; height: 20px; fill: white; }
+        .nav-item { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; cursor: pointer; height: 40px; position: relative; }
+        
+        /* Hero Text */
+        .hero-content { padding: 40px 60px 0 60px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .hero-title { color: white; font-size: 72px; line-height: 1.05; letter-spacing: -2px; font-weight: 400; max-width: 800px; }
+        .hero-desc { color: white; font-size: 18px; line-height: 1.6; max-width: 440px; text-align: right; }
+
+        /* 
+         * ==========================================
+         * 3. NEW AUTHENTICATOR MOCKUP (The "Scan" Implementation)
+         * ==========================================
+         */
+        .auth-mockup-container {
+            position: relative;
+            max-width: 1100px;
+            margin: -140px auto 0 auto;
+            height: 650px;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- Desktop Light App --- */
+        .auth-desktop {
+            position: absolute;
+            left: 0;
+            top: 40px;
+            width: 700px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            padding: 20px;
+            z-index: 5;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .window-header { display: flex; align-items: center; margin-bottom: 20px; gap: 15px; }
+        .traffic-lights { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #FF5F56; } .dot.yellow { background: #FFBD2E; } .dot.green { background: #27C93F; }
+        
+        .btn-new { background: var(--proton-purple); color: white; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 600; border: none; display: flex; align-items: center; gap: 5px; }
+        .search-bar { flex: 1; background: #EAEAEA; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #666; }
+
+        /* --- Mobile Dark App --- */
+        .auth-mobile {
+            position: absolute;
+            right: 100px;
+            top: 0;
+            width: 340px;
+            background: #1C1C1E;
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            padding: 30px 20px;
+            z-index: 10;
+            border: 4px solid #333;
+            color: white;
+            height: 620px;
+            overflow: hidden;
+        }
+
+        .mobile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 0 5px; }
+        .mobile-title { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+
+        /* Shared Row Styles */
+        .auth-row {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        /* Light Theme Rows */
+        .auth-desktop .auth-row { background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .auth-desktop .logo-box { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; margin-right: 15px; }
+        .auth-desktop .otp-code { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 500; letter-spacing: 2px; color: #333; margin-top: 5px; }
+        .auth-desktop .meta-info { flex: 1; }
+        .auth-desktop .service-name { font-weight: 600; font-size: 14px; color: #222; }
+        .auth-desktop .user-email { font-size: 12px; color: #888; }
+        
+        /* Dark Theme Rows */
+        .auth-mobile .auth-row { background: #2C2C2E; border: 1px solid #3A3A3C; }
+        .auth-mobile .logo-box { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white; margin-right: 12px; }
+        .auth-mobile .otp-code { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 500; letter-spacing: 2px; color: white; margin-top: 5px; }
+        .auth-mobile .service-name { font-weight: 600; font-size: 13px; color: #fff; }
+        .auth-mobile .next-code { font-size: 10px; color: #888; text-align: right; margin-top: 4px; font-family: monospace; }
+        
+        /* Colors for logos */
+        .bg-proton { background: #6D4AFF; }
+        .bg-amazon { background: white; border: 1px solid #ddd; color: #333 !important; }
+        .bg-revolut { background: white; color: black !important; font-weight: bold; border: 1px solid #ddd; }
+        .bg-paypal { background: white; color: #003087 !important; border: 1px solid #ddd; }
+        .bg-binance { background: #FCD535; color: black !important; }
+        .bg-netflix { background: black; color: #E50914 !important; }
+        .bg-uber { background: black; color: white !important; }
+        .bg-notion { background: white; color: black !important; }
+
+        /* OTP Timer Circle */
+        .timer-container { position: relative; width: 24px; height: 24px; margin-left: 15px; }
+        .timer-svg { width: 24px; height: 24px; transform: rotate(-90deg); }
+        .timer-circle {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 56; /* 2*pi*9 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+        /* Desktop Timer Color */
+        .auth-desktop .timer-circle { stroke: #6D4AFF; }
+        .auth-desktop .timer-text { font-size: 10px; fill: #6D4AFF; font-weight: bold; }
+        /* Mobile Timer Color */
+        .auth-mobile .timer-circle { stroke: #A28BFF; }
+        .auth-mobile .timer-text { font-size: 9px; fill: white; }
+
+        .timer-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; font-weight: bold; }
+
+        /* FAB on Mobile */
+        .mobile-fab-container {
+            position: absolute; bottom: 20px; left: 20px; right: 20px;
+            display: flex; gap: 10px;
+        }
+        .mobile-search { flex: 1; background: #2C2C2E; border: none; padding: 12px; border-radius: 12px; color: white; font-size: 13px; }
+        .btn-fab { width: 44px; height: 44px; border-radius: 12px; background: var(--proton-purple); color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(109, 74, 255, 0.4); }
+
+        /* Animation for Code Change */
+        @keyframes flash {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .code-update { animation: flash 0.3s ease-out; color: var(--color-blue-brand) !important; }
+
+
+        /* 
+         * ==========================================
+         * 4. CONTENT SECTIONS
+         * ==========================================
+         */
+        .main-container { max-width: var(--container-width); margin: 0 auto; padding: 120px 20px 60px 20px; }
+
+        .mission-section { max-width: 800px; margin-bottom: 80px; }
+        .mission-title { font-family: 'DM Serif Display', serif; font-size: 48px; line-height: 1.2; color: #111; margin-bottom: 24px; }
+        .mission-text { font-size: 18px; color: #555; line-height: 1.6; margin-bottom: 20px; }
+        .highlight { color: var(--color-blue-brand); }
+        .alert-box { background: #FFEBEE; border-left: 4px solid #D32F2F; padding: 15px; border-radius: 4px; color: #B71C1C; font-size: 14px; margin-bottom: 30px; }
+
+        .btn-try-it {
+            display: inline-flex; align-items: center; gap: 12px; margin-top: 10px; padding: 16px 40px;
+            background-color: var(--color-blue-brand); color: white; font-size: 18px; font-weight: 600;
+            border-radius: 100px; box-shadow: 0 10px 25px rgba(75, 189, 246, 0.3); transition: all 0.2s ease;
+        }
+        .btn-try-it:hover { transform: translateY(-3px); background-color: var(--color-blue-dark); }
+
+        /* Cards Grid */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 100px; }
+        .feature-card { background: white; padding: 40px 30px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); }
+        .f-icon { width: 50px; height: 50px; background: var(--color-blue-light); color: var(--color-blue-brand); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+        .f-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+        .f-desc { color: #666; line-height: 1.5; font-size: 15px; }
+
+        /* Footer (Same) */
+        footer { background: #F0F0F0; border-top: 1px solid #E0E0E0; padding: 80px 0; }
+        .footer-inner { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+        .footer-cols { display: flex; gap: 80px; }
+        .f-col h5 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 20px; }
+        .f-col li { margin-bottom: 12px; font-size: 14px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero-wrapper">
+        <nav class="top-nav">
+            <div class="brand-logo">SPAMSLAM</div>
+            <div class="hero-number">02</div>
+        </nav>
+
+        <!-- Navbar Pill -->
+        <div class="nav-pill-wrapper">
+            <div class="nav-pill">
+                <div class="pill-logo"><svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+                <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i></div>
+                <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i></div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Stop SIM Swapping.<br>Secure your Identity.</h1>
+            <p class="hero-desc">
+                Replace SMS-based codes with encrypted verification. 
+                Receive your verification codes directly in the app, 
+                safe from carrier hacks and number theft.
+            </p>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATOR MOCKUP -->
+    <div class="auth-mockup-container">
+        
+        <!-- Desktop Light Version -->
+        <div class="auth-desktop">
+            <div class="window-header">
+                <div class="traffic-lights">
+                    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                </div>
+                <button class="btn-new"><i class="fa-solid fa-plus"></i> New</button>
+                <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i> Search accounts...</div>
+            </div>
+
+            <!-- Item 1 -->
+            <div class="auth-row">
+                <div class="logo-box bg-proton"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="meta-info">
+                    <div class="service-name">Proton</div>
+                    <div class="user-email">eric.norbert@proton.me</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="otp-code" data-code="643 118">643 118</div>
+                    <div style="font-size:10px; color:#999; text-align:right;">Next: 779 656</div>
+                </div>
+                <div class="timer-container">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">23</div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="auth-row">
+                <div class="logo-box bg-amazon"><i class="fa-brands fa-amazon"></i></div>
+                <div class="meta-info"><div class="service-name">Amazon</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="743 290">743 290</div></div>
+                <div class="timer-container">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">03</div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="auth-row">
+                <div class="logo-box bg-revolut">R</div>
+                <div class="meta-info"><div class="service-name">Revolut</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="043 314">043 314</div></div>
+                <div class="timer-container">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">08</div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="auth-row">
+                <div class="logo-box bg-paypal"><i class="fa-brands fa-paypal"></i></div>
+                <div class="meta-info"><div class="service-name">PayPal</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="290 643">290 643</div></div>
+                <div class="timer-container">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">13</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dark Version -->
+        <div class="auth-mobile">
+            <div class="mobile-header">
+                <span class="mobile-title">Authenticator</span>
+                <i class="fa-solid fa-gear" style="color:#888;"></i>
+            </div>
+
+            <!-- Mobile Item 1 -->
+            <div class="auth-row">
+                <div class="logo-box bg-proton"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="meta-info">
+                    <div class="service-name">Proton</div>
+                    <div style="font-size:10px; color:#888;">eric.norbert</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="otp-code" data-code="643 118" style="font-size:18px;">643 118</div>
+                    <div class="next-code">Next: 882 119</div>
+                </div>
+                <div class="timer-container" style="width:20px; height:20px;">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">23</div>
+                </div>
+            </div>
+
+            <!-- Mobile Item 2 -->
+            <div class="auth-row">
+                <div class="logo-box bg-binance"><i class="fa-brands fa-bitcoin"></i></div>
+                <div class="meta-info"><div class="service-name">Binance</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="290 743" style="font-size:20px;">290 743</div></div>
+                <div class="timer-container" style="width:20px; height:20px;">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">12</div>
+                </div>
+            </div>
+
+            <!-- Mobile Item 3 -->
+            <div class="auth-row">
+                <div class="logo-box bg-netflix">N</div>
+                <div class="meta-info"><div class="service-name">Netflix</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="314 043" style="font-size:20px;">314 043</div></div>
+                <div class="timer-container" style="width:20px; height:20px;">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">09</div>
+                </div>
+            </div>
+
+            <!-- Mobile Item 4 -->
+            <div class="auth-row">
+                <div class="logo-box bg-uber">Uber</div>
+                <div class="meta-info"><div class="service-name">Uber</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="643 643" style="font-size:20px;">643 643</div></div>
+                <div class="timer-container" style="width:20px; height:20px;">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">23</div>
+                </div>
+            </div>
+
+            <!-- Mobile Item 5 -->
+            <div class="auth-row">
+                <div class="logo-box bg-notion">N</div>
+                <div class="meta-info"><div class="service-name">Notion</div></div>
+                <div style="text-align:right;"><div class="otp-code" data-code="789 123" style="font-size:20px;">789 123</div></div>
+                <div class="timer-container" style="width:20px; height:20px;">
+                    <svg class="timer-svg" viewBox="0 0 24 24"><circle class="timer-circle" cx="12" cy="12" r="9"></circle></svg>
+                    <div class="timer-center">05</div>
+                </div>
+            </div>
+
+            <div class="mobile-fab-container">
+                <input type="text" class="mobile-search" placeholder="Search">
+                <button class="btn-fab"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        
+        <div class="mission-section">
+            <h2 class="mission-title">
+                What is <span class="highlight">SIM Swapping?</span>
+            </h2>
+            <p class="mission-text">
+                SIM swapping is a type of identity theft where criminals trick a mobile carrier into transferring a victim's phone number to a SIM card they control. This allows the attacker to intercept calls and texts, including two-factor authentication codes, to gain unauthorized access to the victim's accounts like bank and email.
+            </p>
+            <div class="alert-box">
+                <i class="fa-solid fa-triangle-exclamation"></i> 
+                <strong>Real World Impact:</strong> In 2019, former Twitter CEO Jack Dorsey's Twitter account was hacked via this method. It can happen to anyone.
+            </div>
+
+            <a href="#" class="btn-try-it">
+                Secure your Number <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <div class="f-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <div class="f-title">Replace SMS-based codes</div>
+                <p class="f-desc">We're working on a new encrypted service where you can receive your verification codes directly in the app, eliminating the risk of SIM interception.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <div class="f-icon"><i class="fa-solid fa-rotate"></i></div>
+                <div class="f-title">Auto-update numbers</div>
+                <p class="f-desc">When you change your number, SpamSlam automatically updates it across all linked applications, ensuring you never lose access.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <div class="f-icon"><i class="fa-solid fa-lock"></i></div>
+                <div class="f-title">Encrypted Protection</div>
+                <p class="f-desc">All verification data is end-to-end encrypted. Not even your carrier or SpamSlam can see your 2FA codes.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div style="width:200px;"><b>SPAMSLAM</b><br><span style="font-size:12px; color:#888;">© 2025. All rights reserved.</span></div>
+            <div class="footer-cols">
+                <div class="f-col"><h5>Products</h5><ul><li>Mail</li><li>Auth</li><li>Privacy</li></ul></div>
+                <div class="f-col"><h5>Legal</h5><ul><li>Privacy</li><li>Terms</li></ul></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVITY SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rows = document.querySelectorAll('.auth-row');
+
+            rows.forEach(row => {
+                const circle = row.querySelector('.timer-circle');
+                const text = row.querySelector('.timer-center');
+                const codeEl = row.querySelector('.otp-code');
+                
+                // Set random start time for visual variety
+                let timeLeft = parseInt(text.innerText); 
+                const maxTime = 30;
+                const circumference = 56; // 2 * pi * 9
+
+                function update() {
+                    timeLeft--;
+                    
+                    if (timeLeft < 0) {
+                        timeLeft = maxTime;
+                        // Regenerate Code Effect
+                        const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+                        const formatted = newCode.substring(0,3) + " " + newCode.substring(3,6);
+                        
+                        codeEl.innerText = formatted;
+                        codeEl.classList.remove('code-update');
+                        void codeEl.offsetWidth; // Trigger reflow
+                        codeEl.classList.add('code-update');
+                    }
+
+                    // Visual Update
+                    text.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+                    
+                    // Calculate stroke offset
+                    // full offset (56) = empty. 0 = full.
+                    // We want it to empty as time goes down.
+                    // percentage remaining
+                    const pct = timeLeft / maxTime;
+                    const offset = circumference - (pct * circumference);
+                    
+                    circle.style.strokeDashoffset = offset;
+                }
+
+                // Run every second
+                setInterval(update, 1000);
+            });
+        });
+    </script>
+
+</body>
+</html>
