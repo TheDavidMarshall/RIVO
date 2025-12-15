@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Rights Network | The Digital BBB</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            purple: '#4F46E5', // Keep for accents
+                            dark: '#0F172A',   // Slate 900 (Text only now)
+                            neon: '#FACC15',   // Yellow 400 (The Movement Color)
+                            orange: '#F97316', // Orange 500 (Watchmen Color)
+                            cyan: '#06B6D4',   // Cyan 500 (Trust/Forms)
+                            blue: '#3B82F6',   
+                            neonLight: '#FDE047', // Yellow 300 (Highlights)
+                            darklight: '#1E1B4B',   // Indigo 950
+                        }
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'float-delayed': 'float 8s ease-in-out 4s infinite',
+                        'spin-slow': 'spin 30s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'morph': 'morph 8s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+                        },
+                        morph: {
+                            '0%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
+                            '50%': { borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%' },
+                            '100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Premium UI Effects */
+        body {
+            background-color: #F8FAFC;
+        }
+
+        .perspective-container { perspective: 1200px; }
+        
+        .card-3d {
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(79, 70, 229, 0.1);
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 0 30px 60px -10px rgba(79, 70, 229, 0.25);
+            z-index: 50;
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Updated for Warm Backgrounds: White glass with Dark Text */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            color: #0F172A; /* Dark text */
+        }
+
+        .hero-curve { border-bottom-left-radius: 120px; }
+        
+        .fake-text-line {
+            height: 6px; background: #E2E8F0; border-radius: 4px; margin-bottom: 8px;
+        }
+        .fake-text-line.short { width: 60%; }
+        .fake-text-line.medium { width: 80%; }
+        
+        [x-cloak] { display: none !important; }
+
+        .input-field {
+            width: 100%; padding: 14px 18px; background: #F8FAFC; border: 2px solid #E2E8F0;
+            border-radius: 0.75rem; outline: none; transition: all 0.3s ease; font-weight: 500;
+        }
+        .input-field:focus { background: #fff; border-color: #06B6D4; box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-orange selection:text-white" 
+      x-data="{ 
+          currentView: 'home', 
+          submitted: false,
+          navigateTo(view) {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              this.currentView = view;
+          },
+          submitForm() {
+              this.submitted = true;
+              setTimeout(() => {
+                  this.submitted = false;
+                  this.navigateTo('home');
+                  alert('Case Successfully Filed! We will review your complaint against the platform.');
+              }, 2000);
+          }
+      }">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer group" @click="navigateTo('home')">
+                <div class="w-10 h-10 bg-brand-cyan rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 group-hover:bg-brand-orange transition-colors">
+                    <i data-lucide="shield" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-xl text-brand-dark leading-none block">DIGITAL RIGHTS</span>
+                    <span class="text-[10px] font-bold tracking-widest text-gray-500 uppercase block">Network</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
+                <a href="#" @click.prevent="navigateTo('home')" :class="currentView === 'home' ? 'text-brand-orange' : 'hover:text-brand-orange'" class="transition-colors">Home</a>
+                <a href="#" @click.prevent="navigateTo('manifesto')" :class="currentView === 'manifesto' ? 'text-brand-orange' : 'hover:text-brand-orange'" class="transition-colors">Manifesto</a>
+                <a href="#" @click.prevent="navigateTo('benefits')" :class="currentView === 'benefits' ? 'text-brand-orange' : 'hover:text-brand-orange'" class="transition-colors">Why Us</a>
+                <a href="#" @click.prevent="navigateTo('join')" :class="currentView === 'join' ? 'text-brand-orange' : 'hover:text-brand-orange'" class="transition-colors">The Movement</a>
+            </div>
+
+            <button @click="navigateTo('form')" class="bg-brand-dark text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-brand-orange transition-all transform hover:-translate-y-0.5 shadow-lg">
+                Submit Case
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="pt-20">
+
+        <!-- ======================================================= -->
+        <!-- VIEW 1: HOME PAGE -->
+        <!-- ======================================================= -->
+        <div x-show="currentView === 'home'" x-transition.opacity.duration.500ms>
+            
+            <!-- HERO SECTION -->
+            <section class="relative min-h-[92vh] flex items-center overflow-hidden">
+                <!-- Background Gradient Shape (Cyan/Blue for Trust) -->
+                <div class="absolute top-0 right-0 w-[70%] h-[95%] bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 hero-curve -z-10 shadow-2xl"></div>
+                <!-- Ambient Glow (Yellow) -->
+                <div class="absolute top-20 left-10 w-32 h-32 bg-brand-neon rounded-full blur-[100px] opacity-40 animate-pulse-slow"></div>
+
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 w-full pt-10">
+                    
+                    <!-- Left Content -->
+                    <div class="flex flex-col justify-center space-y-8 z-10">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-100 border border-yellow-200 text-yellow-800 text-xs font-bold w-fit shadow-sm">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                            Fighting The "I Accept" Trap
+                        </div>
+                        <h1 class="font-display font-bold text-6xl md:text-8xl text-brand-dark leading-[0.9] uppercase tracking-tighter drop-shadow-sm">
+                            Your<br>Digital Rights<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">Simplified.</span>
+                        </h1>
+                        <p class="text-slate-600 max-w-lg leading-relaxed text-lg font-medium">
+                            Tech companies know you'll click "Accept" anyway. They bury violations in complex terms. <span class="text-brand-orange font-bold">We handle complaints related to privacy policies, subscription traps, and user agreements.</span>
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button @click="navigateTo('form')" class="bg-brand-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-black transition-all shadow-xl hover:shadow-2xl hover:shadow-brand-dark/20 transform hover:-translate-y-1 flex items-center gap-3 group">
+                                Fight for Your Rights
+                                <i data-lucide="gavel" class="w-5 h-5 group-hover:rotate-12 transition-transform text-brand-neon"></i>
+                            </button>
+                            <button @click="navigateTo('join')" class="glass text-brand-dark px-8 py-4 rounded-xl font-bold hover:bg-white transition-all border-2 border-brand-dark/10">
+                                Join the Movement
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Content: 3D Visualization -->
+                    <div class="relative h-[650px] flex items-center justify-center perspective-container hidden lg:flex">
+                        
+                        <!-- Floating Card 1: The Contract -->
+                        <div class="absolute card-3d bg-white p-8 rounded-[2rem] shadow-2xl w-80 h-96 transform rotate-[-6deg] z-10 border border-slate-100 animate-float-delayed">
+                            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                                <span class="font-display font-bold text-lg text-slate-400 tracking-widest">TERMS OF SERVICE</span>
+                                <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse" title="Unread"></div>
+                            </div>
+                            <!-- Fake Text Lines -->
+                            <div class="space-y-3 opacity-30">
+                                <div class="fake-text-line"></div>
+                                <div class="fake-text-line medium"></div>
+                                <div class="fake-text-line short"></div>
+                                <div class="fake-text-line"></div>
+                                <div class="fake-text-line medium"></div>
+                                <div class="fake-text-line"></div>
+                                <div class="fake-text-line short"></div>
+                                <div class="fake-text-line medium"></div>
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
+                                <div class="bg-brand-cyan/10 p-4 rounded-xl border border-brand-cyan/20 text-center">
+                                    <p class="text-[10px] text-brand-cyan font-bold mb-2 uppercase">Did you read this?</p>
+                                    <button class="bg-brand-cyan text-white w-full py-2 rounded-lg font-bold text-sm shadow-md">I Accept</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Card 2: The Solution -->
+                        <div class="absolute top-1/2 right-10 card-3d bg-brand-neon p-8 rounded-[2.5rem] shadow-xl w-72 transform rotate-[8deg] z-20 border border-yellow-300 animate-float">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                    <i data-lucide="scan-eye" class="w-7 h-7 text-brand-dark"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-brand-dark leading-tight text-xl">We Read<br>The Fine Print</h3>
+                                </div>
+                            </div>
+                            <div class="bg-white/60 p-5 rounded-2xl backdrop-blur-sm shadow-sm border border-white/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-red-600">Violation Found</span>
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+                                </div>
+                                <p class="text-sm font-bold text-brand-dark leading-tight">"Arbitration clause prevents you from suing for data leaks."</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ISSUES GRID SECTION -->
+            <section class="py-24 bg-white relative">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center max-w-3xl mx-auto mb-20">
+                        <span class="text-brand-cyan font-bold tracking-widest text-xs uppercase mb-2 block">What We Fight</span>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold text-brand-dark mb-6">Don't Let Them Bully You</h2>
+                        <p class="text-slate-600 text-lg">
+                            Some companies make it simple. Most make it impossible. We reverse the power dynamic.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Issue 1 -->
+                        <div class="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 hover:border-brand-orange/50 hover:shadow-2xl hover:shadow-brand-orange/10 transition duration-300 group cursor-pointer relative overflow-hidden" @click="navigateTo('form')">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-red-100 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:-translate-y-2 transition-transform">
+                                    <i data-lucide="ban" class="w-8 h-8 text-red-500"></i>
+                                </div>
+                                <h3 class="font-display text-2xl font-bold text-brand-dark mb-3">Cancellation Traps</h3>
+                                <p class="text-slate-600 text-sm mb-6 leading-relaxed">Tried to cancel a subscription (like Adobe) but faced a hidden "early termination fee"? Dark patterns are often illegal.</p>
+                                <span class="text-red-500 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Check Eligibility <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Issue 2 -->
+                        <div class="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 hover:border-brand-blue/50 hover:shadow-2xl hover:shadow-brand-blue/10 transition duration-300 group cursor-pointer relative overflow-hidden" @click="navigateTo('form')">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:-translate-y-2 transition-transform">
+                                    <i data-lucide="user-x" class="w-8 h-8 text-brand-blue"></i>
+                                </div>
+                                <h3 class="font-display text-2xl font-bold text-brand-dark mb-3">Account Suspensions</h3>
+                                <p class="text-slate-600 text-sm mb-6 leading-relaxed">Locked out of Facebook, Instagram, or Twitter without a clear reason or human appeal? You have a right to an explanation.</p>
+                                <span class="text-brand-blue font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Appeal Now <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Issue 3 -->
+                        <div class="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 hover:border-yellow-400/50 hover:shadow-2xl hover:shadow-yellow-400/10 transition duration-300 group cursor-pointer relative overflow-hidden" @click="navigateTo('form')">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:-translate-y-2 transition-transform">
+                                    <i data-lucide="car" class="w-8 h-8 text-yellow-600"></i>
+                                </div>
+                                <h3 class="font-display text-2xl font-bold text-brand-dark mb-3">Gig Economy Issues</h3>
+                                <p class="text-slate-600 text-sm mb-6 leading-relaxed">Uber or Lyft driver account deactivated by a bot? Payment withheld? We fight for platform worker rights.</p>
+                                <span class="text-yellow-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Get Help <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- LEGAL PRECEDENTS (WARM BACKGROUND) -->
+            <section class="py-24 bg-gradient-to-br from-brand-orange to-red-600 text-white relative overflow-hidden">
+                <!-- Decorative Circles -->
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-400 rounded-full blur-[150px] opacity-30"></div>
+                <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600 rounded-full blur-[150px] opacity-20"></div>
+
+                <div class="max-w-7xl mx-auto px-6 relative z-10">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                        <div>
+                            <span class="text-white/80 font-bold tracking-widest text-xs uppercase mb-3 block">Case Files</span>
+                            <h2 class="font-display text-4xl md:text-6xl font-bold">We Watch The Watchmen</h2>
+                            <p class="text-white/90 mt-4 max-w-lg text-lg">Recent legal victories show that Big Tech is not above the law. We use these precedents to build your case.</p>
+                        </div>
+                        <button @click="navigateTo('join')" class="border border-white/40 hover:bg-white hover:text-brand-orange text-white px-8 py-3 rounded-xl transition font-bold shadow-lg">View All Cases</button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Case 1 -->
+                        <div class="glass-card p-8 rounded-3xl flex flex-col md:flex-row items-center gap-8 hover:scale-[1.01] transition duration-300">
+                            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-3xl font-display font-bold shrink-0">A</div>
+                            <div class="flex-1">
+                                <h4 class="text-2xl font-bold mb-2 text-slate-900">FTC vs. Adobe</h4>
+                                <p class="text-slate-600 leading-relaxed">The government sued Adobe for hiding early termination fees and making it too hard to cancel subscriptions. This sets a massive precedent against "Dark Patterns" in UI design.</p>
+                            </div>
+                            <div class="bg-green-100 text-green-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">Precedent Set</div>
+                        </div>
+
+                        <!-- Case 2 -->
+                        <div class="glass-card p-8 rounded-3xl flex flex-col md:flex-row items-center gap-8 hover:scale-[1.01] transition duration-300">
+                            <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl font-display font-bold shrink-0">M</div>
+                            <div class="flex-1">
+                                <h4 class="text-2xl font-bold mb-2 text-slate-900">Facebook / Meta Violations</h4>
+                                <p class="text-slate-600 leading-relaxed">Repeated violations regarding data sharing with third parties (Cambridge Analytica legacy) without explicit, informed consent from the user.</p>
+                            </div>
+                            <div class="bg-yellow-100 text-yellow-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">Active Litigation</div>
+                        </div>
+                        <!-- Case 3 -->
+                        <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col md:flex-row items-center gap-8 hover:bg-white/5 transition">
+                            <div class="w-16 h-16 bg-black border border-white/20 rounded-full flex items-center justify-center text-2xl font-bold shrink-0">U</div>
+                            <div class="flex-1">
+                                <h4 class="text-xl font-bold mb-1">Uber Driver Rights</h4>
+                                <p class="text-gray-400 text-sm">Challenges against algorithmic management where drivers are deactivated (fired) by bots without human review, violating labor principles.</p>
+                            </div>
+                            <div class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-xs font-bold uppercase">Precedent Set</div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMMUNITY CTA -->
+            <section class="py-24 bg-brand-neon text-brand-dark relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 text-center">
+                    <div class="inline-block p-4 bg-black/5 rounded-full mb-6"><i data-lucide="users" class="w-8 h-8"></i></div>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold mb-6">For You. By You.</h2>
+                    <p class="text-xl font-medium max-w-2xl mx-auto mb-10">This project is a collective mission to bring privacy advocacy and pro-bono lawyers together.</p>
+
+
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+                        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
+                            <p class="text-3xl font-bold">2026</p>
+                            <p class="text-xs uppercase font-bold opacity-70">Going Live</p>
+                        </div>
+                        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
+                            <p class="text-3xl font-bold">$0</p>
+                            <p class="text-xs uppercase font-bold opacity-70">Cost to Users</p>
+                        </div>
+                        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
+                            <p class="text-3xl font-bold">24h</p>
+                            <p class="text-xs uppercase font-bold opacity-70">Response Time</p>
+                        </div>
+                        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
+                            <p class="text-3xl font-bold">100%</p>
+                            <p class="text-xs uppercase font-bold opacity-70">Independent</p>
+                        </div>
+                    </div>
+
+                    <button @click="navigateTo('join')" class="bg-brand-dark text-white px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition shadow-2xl">
+                        Join the Movement
+                    </button>
+                </div>
+                        <!-- Spinning Text Badge -->
+                        <div class="absolute bottom-10 right-10 z-0">
+                             <div class="w-32 h-32 relative bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-100">
+                                <svg class="absolute w-full h-full animate-spin-slow" viewBox="0 0 100 100">
+                                    <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+                                    <text font-size="11" font-weight="bold" fill="#1E1B4B">
+                                        <textPath href="#circlePath">PROTECT • EMPOWER • SECURE • CONNECT •</textPath>
+                                    </text>
+                                </svg>
+                                <span class="text-3xl text-brand-purple">✦</span>
+                             </div>
+                        </div>
+            </section>
+
+            <!-- STATS / BOTTOM SECTION (RESTORED) -->
+            <section class="bg-brand-darklight text-white py-20 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-16 bg-gray-50 rounded-br-[100px] z-10"></div>
+                
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12 mt-10 relative z-20">
+                    <!-- Col 1: Morphing Blob -->
+                    <div class="flex flex-col items-center lg:items-start">
+                        <h3 class="text-xl font-bold mb-4 ml-4">Why They Matter</h3>
+                        <div class="w-64 h-52 bg-brand-neon text-brand-dark animate-morph flex flex-col items-center justify-center p-6 text-center shadow-[0_0_30px_rgba(253,224,71,0.4)]">
+                            <span class="text-5xl font-display font-bold">100%</span>
+                            <span class="text-xs font-bold uppercase tracking-widest mt-1">Human Rights</span>
+                            <p class="text-[10px] mt-2 opacity-80 max-w-[150px]">Extended to the Digital Space</p>
+                        </div>
+                        <div class="mt-4 text-center lg:text-left ml-4">
+                            <p class="text-brand-neon font-bold text-sm">Adoption Rate</p>
+                            <p class="text-3xl font-display">Global Scale</p>
+                        </div>
+                    </div>
+
+                    <!-- Col 2: Mission Text -->
+                    <div class="flex flex-col justify-center">
+                        <div class="w-12 h-1 bg-brand-blue mb-6"></div>
+                        <h2 class="text-3xl font-bold mb-4 leading-tight">
+                            Make Digital Spaces <span class="text-brand-blue">Safe</span>, <span class="text-brand-neon">Equal</span>, & Free.
+                        </h2>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            We actively participate in internet governance forums to enforce laws like the GDPR and EU AI Act. We provide accessible remedies for violations, ensuring algorithmic bias and digital policing are challenged.
+                        </p>
+                        <a href="#" @click.prevent="navigateTo('manifesto')" class="text-brand-neon underline decoration-2 underline-offset-4 text-sm font-bold hover:text-white transition">Read our Manifesto</a>
+                    </div>
+
+                    <!-- Col 3: Grid Stats -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border border-white/10 p-4 rounded-2xl hover:bg-white/5 transition cursor-default">
+                            <h4 class="text-3xl font-display text-brand-neon">24/7</h4>
+                            <p class="text-[10px] uppercase text-gray-400 mt-1">Protection</p>
+                            <p class="text-[10px] text-gray-500">Active Monitoring</p>
+                        </div>
+                        <div class="border border-white/10 p-4 rounded-2xl hover:bg-white/5 transition cursor-default">
+                            <h4 class="text-3xl font-display text-brand-blue">EU AI</h4>
+                            <p class="text-[10px] uppercase text-gray-400 mt-1">Compliance</p>
+                            <p class="text-[10px] text-gray-500">Legal Act</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-pink-600 to-brand-purple p-4 rounded-2xl col-span-2 flex items-center gap-4 relative overflow-hidden group hover:scale-[1.02] transition">
+                            <div class="absolute top-0 right-0 p-2 opacity-20"><i data-lucide="quote" class="w-8 h-8"></i></div>
+                            <div>
+                                <p class="text-xs italic leading-tight mb-2">"Digital rights are the civil rights of this century. This network makes them accessible."</p>
+                                <p class="text-[10px] font-bold text-brand-neon">- Jane Doe, Activist</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 2: MANIFESTO PAGE -->
+        <!-- ======================================================= -->
+        <div x-show="currentView === 'manifesto'" x-cloak x-transition.opacity.duration.500ms class="min-h-screen bg-white">
+            <!-- Header -->
+            <div class="bg-brand-cyan text-white pt-20 pb-32 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-brand-blue rounded-full blur-[100px] opacity-50"></div>
+                <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                    <span class="inline-block py-1 px-3 rounded-full border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest mb-6">Our Philosophy</span>
+                    <h2 class="font-display text-5xl md:text-8xl font-bold mb-6 uppercase">The Manifesto</h2>
+                    <p class="text-2xl text-white/90 leading-relaxed max-w-2xl mx-auto font-light">
+                        Digital rights are fundamental human rights applied to the digital world.
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto px-6 -mt-20 relative z-20 pb-20">
+                <div class="bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100 mb-16">
+                    <h3 class="font-display text-4xl font-bold text-brand-dark mb-6">Core Definition</h3>
+                    <p class="text-slate-600 leading-relaxed mb-8 text-xl">
+                        We ensure people can use the internet, devices, and media safely, equally, and freely, protecting them from censorship, surveillance, and discrimination online. They cover everything from online access and data protection to freedom of speech.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-2xl">
+                            <i data-lucide="globe" class="w-8 h-8 text-brand-cyan mb-4"></i>
+                            <h4 class="font-bold text-lg mb-2">Access</h4>
+                            <p class="text-sm text-slate-500">Bridging the digital divide.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-brand-orange mb-4"></i>
+                            <h4 class="font-bold text-lg mb-2">Security</h4>
+                            <p class="text-sm text-slate-500">Protection from online harm.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl">
+                            <i data-lucide="scale" class="w-8 h-8 text-brand-neon mb-4 text-yellow-600"></i>
+                            <h4 class="font-bold text-lg mb-2">Equality</h4>
+                            <p class="text-sm text-slate-500">Non-discrimination online.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <div class="bg-brand-orange text-white p-10 rounded-[2.5rem] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-red-500 blur-[50px] opacity-40"></div>
+                        <i data-lucide="lock" class="w-12 h-12 text-white mb-6"></i>
+                        <h4 class="font-display text-3xl font-bold mb-3">Privacy & Data Protection</h4>
+                        <p class="text-white/90 text-lg">Safeguarding personal data from misuse by companies or governments. Your data is not their product.</p>
+                    </div>
+                    <div class="bg-brand-blue text-white p-10 rounded-[2.5rem] relative overflow-hidden">
+                        <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-400 blur-[50px] opacity-40"></div>
+                        <i data-lucide="mic" class="w-12 h-12 text-white mb-6"></i>
+                        <h4 class="font-display text-3xl font-bold mb-3">Freedom of Expression</h4>
+                        <p class="text-white/90 text-lg">The right to express ideas and opinions online without censorship. The internet square must be open.</p>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button @click="navigateTo('join')" class="bg-brand-purple text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl shadow-brand-purple/30 hover:bg-brand-dark transition-all">Support the Manifesto</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 3: BENEFITS PAGE -->
+        <!-- ======================================================= -->
+        <div x-show="currentView === 'benefits'" x-cloak x-transition.opacity.duration.500ms class="min-h-screen bg-slate-50 pb-20">
+            <div class="max-w-6xl mx-auto px-6 pt-10">
+                <button @click="navigateTo('home')" class="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-orange mb-10 transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+                    <div class="lg:col-span-2">
+                        <h1 class="font-display font-bold text-5xl md:text-6xl text-brand-dark mb-6">Why Choose Us?</h1>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                            David versus Goliath. We are the stone. Companies know you are going to click "Accept" anyway. Some make it simple, but most make it intentionally complicated to bury violations of your rights. We reverse that power dynamic.
+                        </p>
+                        <div class="flex gap-4">
+                            <div class="bg-white px-6 py-3 rounded-lg shadow-sm border border-slate-200 font-bold text-brand-cyan">EU </div>
+                            <div class="bg-white px-6 py-3 rounded-lg shadow-sm border border-slate-200 font-bold text-brand-cyan">DSA</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-brand-cyan text-white p-10 rounded-[2.5rem] flex flex-col justify-center shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white blur-[60px] opacity-20"></div>
+                        <h3 class="font-display text-3xl font-bold mb-2">Start Your Case</h3>
+                        <p class="text-sm text-white/90 mb-8">It only takes a few minutes to protect your rights.</p>
+                        <button @click="navigateTo('form')" class="w-full bg-white text-brand-cyan font-bold py-4 rounded-xl hover:bg-brand-neon hover:text-brand-dark transition shadow-lg">File Complaint Now</button>
+                    </div>
+                </div>
+
+                <!-- Benefits List -->
+                <div class="space-y-6">
+
+
+                <!-- B0 -->
+                     <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-8 items-start hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center shrink-0">
+                            <i data-lucide="file-text" class="w-8 h-8 text-brand-blue"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-2xl font-bold text-brand-dark mb-2">Legal Decisions</h3>
+                            <p class="text-slate-600 leading-relaxed">Our mission is to legally evaluate your case. We assess whether actions, such as the removal of a post or failure to act on a report, were legally justified. This includes the application of both German and European law.</p>
+                            <div class="bg-gray-50 p-4 rounded-xl text-sm text-gray-700 font-medium">
+                                <span class="font-bold text-brand-dark">How we work:</span> We request statements, examine information, and provide a clear, detailed, and legally sound decision.
+                            </div>
+                        </div>
+                     </div>
+
+                <!-- B1 -->
+                     <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-8 items-start hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center shrink-0">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-brand-blue"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-2xl font-bold text-brand-dark mb-2">Legal Basis</h3>
+                            <p class="text-sm font-bold text-brand-cyan mb-2 uppercase">Providing accessible remedies like explanations or compensation.</p>
+                            <p class="text-slate-600 leading-relaxed">Our procedure has been legally reviewed. As a user, individual, or whistleblower, you can trust that your concern will be examined in a structured process.</p>
+                        </div>
+                     </div>
+                     <!-- Additional benefits can be added here similar to previous iterations -->
+
+                     <!-- B2 -->
+                     <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-8 items-start hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-brand-neon/10 rounded-2xl flex items-center justify-center shrink-0">
+                            <i data-lucide="credit-card" class="w-8 h-8 text-yellow-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-2xl font-bold text-brand-dark mb-2">Free of Charge</h3>
+                            <p class="text-slate-600 leading-relaxed">As a user, the situation is often difficult, as you stand little chance alone against the platforms - David versus Goliath.</p>
+                        </div>
+                     </div>
+                     <!-- B3 -->
+                     <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-8 items-start hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center shrink-0">
+                            <i data-lucide="scale" class="w-8 h-8 text-red-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-2xl font-bold text-brand-dark mb-2">Independent & Impartial</h3>
+                            <p class="text-slate-600 leading-relaxed">Our mediators work independently. We accept no funding from platforms. We are 100% on the side of the law and the user.</p>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600">No External Funding</span>
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600">Expert Mediators</span>
+                            </div>
+                        </div>
+                     </div>
+                     <!-- B4 -->
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 4: JOIN THE MOVEMENT (YELLOW BACKGROUND) -->
+        <!-- ======================================================= -->
+        <div x-show="currentView === 'join'" x-cloak x-transition.opacity.duration.500ms class="min-h-screen bg-brand-neon pb-20">
+            
+            <!-- Hero Header -->
+            <div class="relative pt-24 pb-32 overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+                    <span class="inline-block py-1 px-3 rounded-full border border-black/10 text-brand-dark text-xs font-bold uppercase tracking-widest mb-6">Open Collective</span>
+                    <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 text-brand-dark">Join The Digital Guard</h1>
+                    <p class="text-xl text-brand-dark/80 max-w-2xl mx-auto leading-relaxed font-medium">
+                        We are building the largest independent network of advocates, lawyers, and tech experts to hold Big Tech accountable.
+                    </p>
+                </div>
+            </div>
+
+            <!-- The Mission: "The Digital BBB" -->
+            <div class="max-w-5xl mx-auto px-6 -mt-16 relative z-20 mb-24">
+                <div class="glass-card p-10 md:p-16 rounded-[3rem] text-center">
+                    <div class="w-24 h-24 bg-brand-dark text-brand-neon rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl transform rotate-3">
+                        <i data-lucide="scale" class="w-12 h-12"></i>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-brand-dark">The "Better Business Bureau" of the Internet</h2>
+                    <p class="text-slate-700 text-lg leading-relaxed max-w-3xl mx-auto font-medium">
+                        Our mission is simple but necessary. Just as the BBB held traditional companies accountable, the <strong>Digital Rights Network</strong> is the watchdog for the 21st century.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Who Can Help? -->
+            <div class="max-w-7xl mx-auto px-6 mb-24">
+                <h2 class="font-display text-4xl font-bold text-center mb-12 text-brand-dark">Who We Need</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Role 1 -->
+                    <div class="glass-card p-10 rounded-[2.5rem] hover:scale-[1.02] transition duration-300 group">
+                        <div class="w-14 h-14 bg-brand-cyan rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition text-white"><i data-lucide="users" class="w-7 h-7"></i></div>
+                        <h3 class="font-bold text-2xl mb-2 text-brand-dark">Everyday Users</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">You are the eyes and ears. Report violations, share your stories, and help us identify patterns of abuse by platforms.</p>
+                        <button class="text-brand-cyan font-bold text-xs uppercase flex items-center gap-2 tracking-widest" @click="navigateTo('form')">Report Issue <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                    </div>
+
+                    <!-- Role 2 -->
+                    <div class="glass-card p-10 rounded-[2.5rem] hover:scale-[1.02] transition duration-300 group">
+                        <div class="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition text-white"><i data-lucide="briefcase" class="w-7 h-7"></i></div>
+                        <h3 class="font-bold text-2xl mb-2 text-brand-dark">Pro-Bono Lawyers</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Legal expertise is our weapon. Help us review terms of service, draft demand letters, and represent users in arbitration.</p>
+                        <a href="#" class="text-red-500 font-bold text-xs uppercase flex items-center gap-2 tracking-widest">Join Legal Panel <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <!-- Role 3 -->
+                    <div class="glass-card p-10 rounded-[2.5rem] hover:scale-[1.02] transition duration-300 group">
+                        <div class="w-14 h-14 bg-brand-neonLight rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition text-white"><i data-lucide="briefcase" class="w-7 h-7"></i></div>
+                        <h3 class="font-bold text-2xl mb-2 text-brand-dark">Tech Experts</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Help us build tools to scan privacy policies automatically or audit algorithms for bias and discrimination.</p>
+                        <a href="#" class="text-brand-neonLight font-bold text-xs uppercase flex items-center gap-2 tracking-widest">View GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <!-- Role 4 -->
+                    <div class="glass-card p-10 rounded-[2.5rem] hover:scale-[1.02] transition duration-300 group">
+                        <div class="w-14 h-14 bg-brand-purple rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition text-white"><i data-lucide="briefcase" class="w-7 h-7"></i></div>
+                        <h3 class="font-bold text-2xl mb-2 text-brand-dark">Policy Advocates</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Researchers and writers to help us draft policy recommendations for the EU Commission and national governments.</p>
+                        <a href="#" class="text-brand-purple font-bold text-xs uppercase flex items-center gap-2 tracking-widest">Contact Team <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+
+            </div>
+        </div>
+
+            <!-- Spread the Word -->
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="bg-gradient-to-r from-sky-500 to-blue-600 p-1 rounded-[2.5rem] shadow-2xl">
+                    <div class="bg-white rounded-[2.3rem] p-12 relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h2 class="font-display text-4xl font-bold mb-4">Amplify Our Voice</h2>
+                            <p class="text-slate-300 mb-8 max-w-xl mx-auto">
+                                The tech giants have billions of dollars in marketing. We have you. Help us reach more people by sharing our mission.
+                            </p>
+                            <a href="https://twitter.com/intent/tweet?text=I%20am%20joining%20the%20Digital%20Rights%20Network.%20It's%20time%20to%20hold%20Big%20Tech%20accountable.%20Join%20the%20movement%20here:%20https://digitalrights.network" target="_blank" class="inline-flex items-center gap-3 bg-[#1DA1F2] hover:bg-[#1a91da] text-white px-8 py-4 rounded-xl font-bold text-lg transition transform hover:-translate-y-1 shadow-lg">
+                                <i data-lucide="twitter" class="w-5 h-5 fill-current"></i>
+                                Spread the Word
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 5: SUBMIT CASE FORM -->
+        <!-- ======================================================= -->
+        <div x-show="currentView === 'form'" x-cloak x-transition.opacity.duration.500ms class="min-h-screen bg-slate-50 pb-20">
+            <div class="max-w-3xl mx-auto px-6 pt-10">
+                <button @click="navigateTo('home')" class="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-cyan mb-8 transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Cancel
+                </button>
+
+                <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100">
+                    <!-- Form Header (Cyan for Trust) -->
+                    <div class="bg-brand-cyan p-12 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-80 h-80 bg-white rounded-full mix-blend-overlay filter blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+                        <h2 class="font-display text-4xl font-bold relative z-10">Submit Your Case</h2>
+                        <p class="text-white/90 mt-3 relative z-10 text-lg">Secure. Encrypted. Impartial.</p>
+                    </div>
+
+                    <form @submit.prevent="submitForm" class="p-8 md:p-12 space-y-8">
+                        <div>
+                            <h3 class="font-bold text-brand-dark mb-6 flex items-center gap-2 text-lg border-b pb-2"><i data-lucide="user" class="w-5 h-5 text-brand-cyan"></i> Personal Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Full Name</label>
+                                    <input type="text" class="input-field" placeholder="Jane Doe" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Email Address</label>
+                                    <input type="email" class="input-field" placeholder="jane@example.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-brand-dark mb-6 flex items-center gap-2 text-lg border-b pb-2"><i data-lucide="alert-triangle" class="w-5 h-5 text-brand-orange"></i> Incident Details</h3>
+                            <div class="mb-6">
+                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Type of Issue</label>
+                                <div class="relative">
+                                    <select class="input-field bg-white appearance-none cursor-pointer" required>
+                                        <option value="" disabled selected>Select the category...</option>
+                                        <option>Hidden Fees / Subscription Trap (Adobe, etc.)</option>
+                                        <option>Account Suspension (Meta, Twitter, etc.)</option>
+                                        <option>Platform/Gig Economy Dispute (Uber, Lyft)</option>
+                                        <option>Privacy Policy Violation</option>
+                                        <option>Data Leak</option>
+                                    </select>
+                                    <div class="absolute right-4 top-4 pointer-events-none text-slate-500"><i data-lucide="chevron-down" class="w-5 h-5"></i></div>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Company/Platform</label>
+                                <input type="text" class="input-field" placeholder="e.g., Adobe, Facebook, Uber" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Description</label>
+                                <textarea class="input-field h-40 resize-none" placeholder="Describe the difficulty you faced. Be specific..." required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="pt-6">
+                            <button type="submit" class="w-full bg-brand-orange text-white font-bold py-4 rounded-xl hover:bg-brand-dark transition shadow-lg flex items-center justify-center gap-3 text-lg group" :disabled="submitted">
+                                <span x-show="!submitted">Submit Complaint</span>
+                                <span x-show="submitted">Processing Encryption...</span>
+                                <i x-show="!submitted" data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
