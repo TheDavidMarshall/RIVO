@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAILROOM</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Permanent+Marker&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+            margin: 0; padding: 0;
+        }
+
+        /* --- PART 1: NEXTQ STYLES --- */
+        .grid-bg {
+            background-color: #1830f0; 
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .handwritten {
+            font-family: 'Permanent Marker', cursive;
+            position: relative;
+            display: inline-block;
+            transform: rotate(-3deg);
+            z-index: 10;
+        }
+        
+        .handwritten::before {
+            content: '';
+            position: absolute;
+            top: 5%; left: -5%;
+            width: 110%; height: 95%;
+            background: #1a1a1a;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            z-index: -1;
+            transform: rotate(2deg) scale(1.1);
+        }
+
+        .glass-card {
+            background: #1f1f1f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Glass Cards */
+        .glass-cards {
+            background: rgba(31, 31, 31, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .reveal-element { opacity: 0; transform: translateY(30px); }
+        #lime-path { stroke-dasharray: 3000; stroke-dashoffset: 3000; }
+
+        /* --- PART 2: MAILROOM SPECIFIC STYLES --- */
+        .dash-container {
+            background-color: #dc2626; /* Light Blue Tint*/
+            color: #1a1a1a;
+        }
+        
+        .dash-card {
+            background: #ffffff;
+            border-radius: 20px; /* Softer radius */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Custom Scrollbar for dashboard */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+
+        /* 
+         * ==========================================
+         * 2. HEADER & HERO SECTION
+         * ==========================================
+         */
+        .hero-wrapper {
+            background-color: var(--color-blue-brand);
+            /* Extended padding bottom to allow app mockup overlap */
+            padding-bottom: 160px; 
+            position: relative;
+            width: 100%;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 32px 48px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+        }
+
+        .hero-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 80px;
+            color: rgba(255,255,255,0.95);
+            line-height: 1;
+        }
+
+        /* Floating Navigation Pill */
+        .nav-pill-wrapper {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .nav-pill {
+            background: #ffffff;
+            color: #1830f0;
+            padding: 6px;
+            padding-right: 24px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        .pill-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1830f0, #4bbdf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skiff-swirl { 
+            width: 20px; 
+            height: 20px; 
+            fill: white; 
+        }
+
+        .nav-item {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            height: 40px; /* Expands hover area */
+        }
+
+        .nav-item i { 
+            font-size: 10px; 
+            color: #888; 
+            transition: transform 0.2s; 
+        }
+
+        .nav-item:hover i { 
+            transform: rotate(180deg); 
+        }
+
+        /* Dropdown Menus */
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            left: -20px;
+            width: 280px;
+            background: #fffefe;
+            border-radius: 16px;
+            padding: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            z-index: 101;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dd-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 10px;
+            transition: background 0.15s ease;
+        }
+
+        .dd-link:hover { 
+            background: rgba(255,255,255,0.08); 
+        }
+
+        .dd-icon {
+            width: 36px; 
+            height: 36px;
+            border-radius: 8px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 16px; 
+            flex-shrink: 0;
+        }
+
+        /* Product Dropdown Icons */
+        .dd-icon.mail { background: #4BBDF6; color: white; }
+        .dd-icon.pages { background: #eee; color: #333; }
+        .dd-icon.cal { background: #EC407A; color: white; }
+        .dd-icon.drive { background: #43A047; color: white; }
+
+        /* Resources Dropdown Icons (Outline Style) */
+        .dd-icon.resource {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+        }
+
+        .dd-info h4 { 
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 2px; 
+            color: #181717;
+        }
+
+        .dd-info p { 
+            font-size: 12px; 
+            color: #999; 
+        }
+
+        /* Hero Text Content */
+        .hero-content {
+            padding: 40px 60px 60px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .hero-title {
+            color: white;
+            font-size: 76px;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 400;
+        }
+
+        /* Inline Mail Icon in Title */
+        .title-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 52px;
+            background: linear-gradient(180deg, #81D4FA 0%, #4BBDF6 100%);
+            border: 2px solid white;
+            border-radius: 12px;
+            vertical-align: middle;
+            margin: 0 12px;
+            position: relative;
+            top: -6px;
+        }
+
+        .title-icon i { 
+            font-size: 28px; 
+            color: white; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); 
+        }
+
+        .hero-desc {
+            color: white;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 440px;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- ========================================== -->
+    <!-- PART 1: NEXTQ LANDING (BLUE SECTION)       -->
+    <!-- ========================================== -->
+    <main class="relative w-full h-screen grid-bg overflow-hidden flex flex-col">
+        
+        <!-- Wavy Line (Original Loop) -->
+        <svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+            <path id="lime-path" d="M-50,700 C50,750 150,900 300,800 C450,700 300,550 150,550 C50,550 50,300 300,250 C500,200 800,220 1000,250 C1200,280 1350,400 1500,450" 
+                  fill="none" stroke="#B2FF7A" stroke-width="65" stroke-linecap="round" />
+        </svg>
+
+        <!-- Navbar -->
+        <nav class="relative z-50 flex justify-between items-center p-6 md:px-12 shrink-0">
+            <div class="text-white text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-white mt-1"></i>
+            </div>
+
+
+        <!-- FLOATING NAVIGATION (Pill) -->
+        <div class="nav-pill-wrapper">
+            <div class="nav-pill">
+                <div class="pill-logo">
+                    <svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                
+                <!-- Product Dropdown -->
+                <div class="nav-item">
+                    Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>...</p></div></a>
+                        <a href="./simswap" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a>
+                        <a href="#" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Privacy Heros</h4><p>...</p></div></a>
+                        <a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a>
+                    </div>
+                </div>
+
+                <!-- Resources Dropdown (UPDATED) -->
+                <div class="nav-item">
+                    Resources <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu" style="width: 250px;">
+                        <a href="./startup-week" class="dd-link">
+                            <div class="dd-icon resource"><i class="fa-regular fa-file"></i></div>
+                            <div class="dd-info"><h4>Startup Week</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon resource"><i class="fa-solid fa-building-columns"></i></div>
+                            <div class="dd-info"><h4>Digital Rights Network</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon resource"><i class="fa-regular fa-clock"></i></div>
+                            <div class="dd-info"><h4>Whitepaper</h4></div>
+                        </a>
+                        <a href="#" class="dd-link">
+                            <div class="dd-icon resource"><i class="fa-regular fa-circle-question"></i></div>
+                            <div class="dd-info"><h4>Help</h4></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </nav>
+
+        <!-- Floating Cards (Original Positions) -->
+        <!-- Dots Card -->
+        <div class="absolute left-[18%] top-[12%] w-[200px] p-4 rounded-3xl glass-cards rotate-[-12deg] z-20 reveal-element hidden md:block">
+            <div class="flex justify-between items-center text-xs text-gray-400 mb-3">
+                <span>You progress</span><span class="text-white font-bold">89%</span>
+            </div>
+            <div class="grid grid-cols-6 gap-2 place-items-center">
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#B2FF7A]"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-[#B2FF7A]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#B2FF7A]"></div><div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div><div class="w-2.5 h-2.5 rounded-full bg-[#B2FF7A]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-white"></div><div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#B2FF7A]"></div><div class="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+            </div>
+        </div>
+
+        <!-- Graph Card -->
+        <div class="absolute left-[38%] top-[18%] w-[260px] h-[140px] p-4 rounded-3xl glass-cards rotate-[5deg] z-30 reveal-element hidden md:block">
+            <div class="relative h-full w-full">
+                <img src="https://i.pravatar.cc/100?img=33" class="w-9 h-9 rounded-full border border-gray-500 absolute top-0 left-0">
+                <svg viewBox="0 0 140 60" class="absolute top-0 right-0 w-[70%] h-full overflow-visible">
+                    <path d="M0,50 L20,40 L40,45 L60,20 L80,10 L100,15 L120,5 L140,10" fill="none" stroke="#B2FF7A" stroke-width="2" />
+                    <circle cx="80" cy="10" r="3" fill="#B2FF7A" stroke="#1f1f1f" stroke-width="1"/>
+                    <circle cx="120" cy="5" r="3" fill="#B2FF7A" stroke="#1f1f1f" stroke-width="1"/>
+                    <text x="60" y="5" fill="#B2FF7A" font-size="10">✦</text>
+                </svg>
+                <div class="absolute bottom-0 left-0">
+                    <div class="text-[11px] text-white font-bold">December totals</div>
+                    <div class="text-[10px] text-gray-500">14/30 finished task</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bars Card -->
+        <div class="absolute right-[15%] top-[18%] w-[180px] p-5 rounded-3xl glass-cards rotate-[12deg] z-20 reveal-element hidden md:block">
+            <div class="flex justify-between text-xs text-white font-semibold mb-6">
+                <span>Task progress</span><i class="ph-fill ph-sparkle text-[#B2FF7A]"></i>
+            </div>
+            <div class="flex gap-3 h-28 items-end">
+                <div class="w-1/2 flex flex-col gap-1 h-full justify-end">
+                    <span class="text-[9px] text-gray-400 leading-tight">Delivery<br><span class="text-white text-xs">51%</span></span>
+                    <div class="w-full bg-[#B2FF7A] rounded-lg h-[70%] shadow-[0_0_15px_rgba(178,255,122,0.3)]"></div>
+                </div>
+                <div class="w-1/2 flex flex-col gap-1 h-full justify-end">
+                    <span class="text-[9px] text-gray-400 leading-tight">Prototype<br><span class="text-white text-xs">24%</span></span>
+                    <div class="w-full bg-white rounded-lg h-[35%] relative">
+                        <div class="absolute w-full top-1/2 border-t border-dashed border-black/30"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-40 flex flex-col items-center justify-center flex-grow text-center px-4 mt-12">
+            <h1 class="text-5xl md:text-[5.5rem] font-semibold tracking-tight leading-[0.95] reveal-element">
+                Built to <span class="text-[#B2FF7A]">simplify</span><br>
+                <span class="text-[#B2FF7A]">privacy</span> with<br>
+                <div class="flex items-center justify-center gap-4 mt-2">
+                    <span>MR</span>
+                    <span class="handwritten text-white px-3 pb-1">AI-driven</span>
+                </div>
+                MAIL
+            </h1>
+
+            <div class="mt-12 flex flex-col md:flex-row items-center gap-8 reveal-element">
+                <button class="bg-[#B2FF7A] text-black text-lg font-bold py-4 px-8 rounded-2xl flex items-center gap-3 hover:scale-105 transition transform shadow-[0_10px_40px_rgba(178,255,122,0.3)]">
+                    <span class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center"><i class="ph-bold ph-plus"></i></span>
+                    Follow Us on <br> Twitter "x"
+                </button>
+                <div class="flex items-center gap-4">
+                    <div class="flex -space-x-4">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#1830f0]" src="https://i.pravatar.cc/150?img=68">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#1830f0]" src="https://i.pravatar.cc/150?img=47">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#1830f0]" src="https://i.pravatar.cc/150?img=12">
+                    </div>
+                    <span class="text-lg font-medium">Launching March 2026</span>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- PART 2: MAILROOM DASHBOARD (Exact Replica) -->
+    <!-- ========================================== -->
+    <section class="dash-container py-16 px-4 md:px-8 relative z-50">
+
+            <!-- DOMAIN TYPING ANIMATION (Requested) -->
+            <div class="mt-20 reveal-element">
+                <div class="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md border border-white/10 px-8 py-4 rounded-full text-xl md:text-2xl font-medium">
+                    <span class="text-gray-400">Claim:</span>
+                    <span id="domain-target" class="text-[#B2FF7A] mono-text min-w-[200px] text-left"></span><span class="cursor-blink text-[#B2FF7A]">|</span>
+                </div>
+            </div>
+        
+        <div class="max-w-[1400px] mx-auto grid grid-cols-12 gap-0 dash-card overflow-hidden min-h-[900px]">
+            
+            <!-- LEFT SIDEBAR -->
+            <aside class="col-span-12 lg:col-span-4 border-r border-gray-100 bg-white p-8 flex flex-col">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-[#4BBDF6] rounded flex items-center justify-center text-white text-xs"><i class="ph-bold ph-check"></i></div>
+                        <span class="font-bold text-lg text-gray-800 tracking-tight">MAILROOM</span>
+                    </div>
+                    <!-- Search Bar -->
+                    <div class="bg-gray-100 flex items-center px-3 py-2 rounded-lg w-40">
+                        <input type="text" placeholder="Search..." class="bg-transparent text-xs outline-none w-full">
+                        <i class="ph-bold ph-magnifying-glass text-gray-400"></i>
+                    </div>
+                    <div class="flex gap-2 text-gray-400">
+                        <i class="ph-bold ph-gear"></i>
+                        <i class="ph-bold ph-list"></i>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="relative">
+                        <img src="https://i.pravatar.cc/150?img=11" class="w-14 h-14 rounded-full border-2 border-white shadow-sm">
+                        <div class="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 leading-tight">Good morning,<br>David!</h2>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 mb-8">
+                    <button class="flex-1 bg-[#4BBDF6] hover:bg-[#3bc260] text-white font-semibold py-3 px-4 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition">
+                        <i class="ph-bold ph-plus"></i> Compose
+                    </button>
+                    <button class="flex-1 border border-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2 transition">
+                        <i class="ph-bold ph-video-camera"></i> Schedule a call
+                    </button>
+                </div>
+
+                <!-- Nav Tabs -->
+                <div class="flex justify-between text-sm text-gray-400 border-b border-gray-100 pb-3 mb-6 overflow-x-auto">
+                    <span class="text-blue-600 font-bold border-b-2 border-blue-500 pb-3 -mb-3.5 cursor-pointer">Inbox</span>
+                    <span class="hover:text-gray-600 cursor-pointer">Starred</span>
+                    <span class="hover:text-gray-600 cursor-pointer">Drafted</span>
+                    <span class="hover:text-gray-600 cursor-pointer">Urgent</span>
+                    <span class="hover:text-gray-600 cursor-pointer">Spam</span>
+                    <span class="hover:text-gray-600 cursor-pointer">More ▾</span>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex gap-6 text-xl font-bold text-gray-800 mb-6">
+                    <span class="cursor-pointer">All</span>
+                    <span class="text-gray-300 cursor-pointer">People</span>
+                    <span class="text-gray-300 cursor-pointer">Companies</span>
+                </div>
+
+                <!-- Email List -->
+                <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-1">
+                    <!-- Item 1 -->
+                    <div class="group flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded text-transparent group-hover:border-gray-400"></div>
+                        <img src="https://i.pravatar.cc/100?img=59" class="w-10 h-10 rounded-full">
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-gray-900 text-sm">Leo Vishnek</span>
+                                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full">2 new</span>
+                            </div>
+                            <div class="text-xs text-gray-500">7:28 PM</div>
+                        </div>
+                        <i class="ph-star text-gray-300"></i>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="group flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded"></div>
+                        <div class="relative w-10 h-10">
+                            <img src="https://i.pravatar.cc/100?img=33" class="w-10 h-10 rounded-full absolute left-0 top-0 border border-white">
+                            <img src="https://i.pravatar.cc/100?img=12" class="w-10 h-10 rounded-full absolute left-3 top-0 border border-white">
+                        </div>
+                        <div class="flex-1 pl-4">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-gray-900 text-sm">Terrell and Daniel</span>
+                                <i class="ph-fill ph-star text-yellow-400"></i>
+                            </div>
+                            <div class="text-xs text-gray-500">Yesterday at 8:35 AM</div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="group flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded"></div>
+                        <img src="https://i.pravatar.cc/100?img=68" class="w-10 h-10 rounded-full">
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-gray-900 text-sm">Gavin Otto</span>
+                                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full">5 new</span>
+                            </div>
+                            <div class="text-xs text-gray-500">Feb 4, 8:35 AM</div>
+                        </div>
+                        <i class="ph-star text-gray-300"></i>
+                    </div>
+
+                    <!-- Item 4 (Activeish) -->
+                    <div class="group flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded"></div>
+                        <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white"><i class="ph-fill ph-apple-logo text-xl"></i></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-gray-900 text-sm">Apple</span>
+                            </div>
+                            <div class="text-xs text-gray-500">Feb 3, 12:43 PM</div>
+                        </div>
+                        <i class="ph-star text-gray-300"></i>
+                    </div>
+
+                    <!-- Item 5 (Max Skylar) -->
+                    <div class="group flex items-center gap-3 p-3 bg-blue-50/50 rounded-xl cursor-pointer transition border border-transparent hover:border-blue-100">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded"></div>
+                        <img src="https://i.pravatar.cc/100?img=3" class="w-10 h-10 rounded-full">
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-blue-800 text-sm">Max Skylar</span>
+                            </div>
+                            <div class="text-xs text-gray-500">Feb 3, 16:05 PM</div>
+                        </div>
+                        <i class="ph-star text-gray-300"></i>
+                    </div>
+                </div>
+
+                <!-- AD CARD: "Watches are cool again" -->
+                <div class="mt-4 bg-[#F2F9F2] p-5 rounded-2xl flex items-center justify-between relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="text-[10px] text-gray-400 uppercase font-bold mb-1">Advertisement</div>
+                        <h3 class="font-bold text-gray-800 leading-tight mb-2">Spam<br>are hitting again</h3>
+                        <p class="text-[8px] text-gray-500 w-32 leading-relaxed mb-3">‘’ Tired of hitting unsubscribe only to get even more spam? Take out digital trash with one tap. Old accounts, random subscriptions, dusty logins.</p>
+                        <div class="flex items-center gap-2">
+                             <div class="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center text-[6px] text-white font-bold">SS</div>
+                             <span class="text-[8px] text-gray-500">Powered by <span class="font-bold text-gray-700">SpamSlam</span></span>
+                        </div>
+                    </div>
+                    <!-- Mock Watch Image -->
+                    <div class="w-16 h-24 bg-white rounded-xl shadow-md flex flex-col items-center justify-center p-1 relative z-10">
+                        <div class="w-10 h-10 bg-blue-800 rounded-full border-2 border-gray-800 flex items-center justify-center">
+                            <div class="w-1 h-3 bg-gray-400 rotate-45"></div>
+                        </div>
+                        <div class="w-4 h-8 bg-blue-700 mt-1 rounded-sm"></div>
+                        <div class="mt-1 text-[10px] font-bold">299<span class="text-[6px] align-top">$</span></div>
+                    </div>
+                    <!-- Decorative Circle -->
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-100 rounded-full opacity-50 z-0"></div>
+                </div>
+            </aside>
+
+            <!-- RIGHT MAIN CONTENT -->
+            <main class="col-span-12 lg:col-span-8 bg-white p-8 md:p-12 flex flex-col h-full relative">
+                
+                <!-- Top Status Bar -->
+                <div class="flex justify-between items-start mb-8">
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.pravatar.cc/100?img=3" class="w-10 h-10 rounded-full">
+                        <div>
+                            <div class="font-bold text-gray-900 text-sm">Max Skylar</div>
+                            <div class="text-xs text-gray-400">Available</div>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-dots-three-vertical text-gray-400 cursor-pointer"></i>
+                </div>
+
+                <!-- Subjects -->
+                <div class="mb-8">
+                    <div class="text-xs text-gray-400 mb-2">Subjects</div>
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="px-4 py-1.5 bg-gray-100 rounded-full text-xs font-bold text-gray-700">Subscription</span>
+                        <span class="px-4 py-1.5 border border-gray-200 rounded-full text-xs text-gray-500">Valuable Customer</span>
+                        <span class="px-4 py-1.5 border border-gray-200 rounded-full text-xs text-gray-500">Welcome</span>
+                        <span class="px-4 py-1.5 border border-gray-200 rounded-full text-xs text-gray-500">Promotion</span>
+                        <span class="px-4 py-1.5 border border-gray-200 rounded-full text-xs text-gray-500">Invitation</span>
+                    </div>
+                </div>
+
+                <!-- Thread Title -->
+                <div class="border-b border-gray-100 pb-4 mb-6 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-900">Subscription</h2>
+                    <i class="ph-star text-gray-300 text-xl"></i>
+                </div>
+
+                <!-- Message 1: Max -->
+                <div class="mb-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://i.pravatar.cc/100?img=3" class="w-10 h-10 rounded-full">
+                        <div>
+                            <div class="font-bold text-gray-900 text-sm">Max Skylar</div>
+                            <div class="text-xs text-gray-400">Feb 3, 14:47 PM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm text-gray-700 leading-relaxed pl-14">
+                        <p class="font-bold">Hi David,</p>
+                        <p>Thank you so much for being a customer of our company.</p>
+                        <p>It's because of people like you we have been able to be in business for such a long time. To thank you, we have created a discount coupon especially for you.</p>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="flex gap-4 pl-14 mt-6">
+                        <!-- Attachment 1 -->
+                        <div class="flex items-center justify-between border border-gray-100 bg-gray-50/50 p-3 rounded-lg w-72 hover:border-gray-300 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center"><i class="ph-bold ph-image"></i></div>
+                                <span class="text-xs font-medium text-gray-700">David Milner's Badge 2022.png</span>
+                            </div>
+                            <i class="ph-arrow-down text-gray-400 text-xs"></i>
+                        </div>
+                        <!-- Attachment 2 -->
+                        <div class="flex items-center justify-between border border-gray-100 bg-gray-50/50 p-3 rounded-lg w-72 hover:border-gray-300 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center"><i class="ph-bold ph-file-pdf"></i></div>
+                                <span class="text-xs font-medium text-gray-700">Valuable Customers 2021 List.pdf</span>
+                            </div>
+                            <i class="ph-arrow-down text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 2: David (Reply) -->
+                <div class="mb-8 pl-14 border-l-2 border-gray-100 ml-5 py-2">
+                    <div class="flex items-center gap-3 mb-3 pl-4">
+                        <img src="https://i.pravatar.cc/150?img=11" class="w-8 h-8 rounded-full">
+                        <div>
+                            <div class="font-bold text-gray-900 text-sm">David Milner</div>
+                            <div class="text-xs text-gray-400">Feb 3, 16:05 PM</div>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-sm text-gray-700 leading-relaxed pl-4">
+                        <p class="font-bold">Hi David,</p>
+                        <p>Thank you so much for valuing your customers.</p>
+                        <p>Thank you,</p>
+                        <p>Max</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Reply Box -->
+                <div class="mt-auto pt-6 border-t border-gray-100 flex items-center gap-4">
+                    <button class="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center text-white"><i class="ph-bold ph-plus"></i></button>
+                    <i class="ph-bold ph-paperclip text-gray-500"></i>
+                    <i class="ph-bold ph-image text-gray-500"></i>
+                    
+                    <div class="flex-1 bg-gray-50 rounded-lg px-4 py-3 flex justify-between items-center">
+                        <input type="text" placeholder="Start writing an email..." class="bg-transparent w-full outline-none text-sm text-gray-600 placeholder-gray-400">
+                        <div class="flex items-center gap-3 text-gray-400">
+                            <i class="ph-corners-out"></i>
+                        </div>
+                    </div>
+                    <button class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition">
+                        <i class="ph-bold ph-paper-plane-right"></i>
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </section>
+
+    <!-- JS Logic for Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // 1. NextQ Landing Animations
+            const tl = gsap.timeline();
+
+            // Draw line
+            tl.to("#lime-path", { strokeDashoffset: 0, duration: 2.5, ease: "power2.inOut" });
+
+            // Reveal Hero Elements
+            tl.to(".reveal-element", {
+                opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out"
+            }, "-=1.5");
+
+            // Float Cards Animation
+            gsap.to(".glass-card", {
+                y: "-=15", rotation: "+=2", duration: 3, yoyo: true, repeat: -1, ease: "sine.inOut",
+                stagger: { each: 0.5, from: "random" }
+            });
+
+            // 2. Typing Effect Logic
+            const domains = ["@mailroom.com", "@rizz.com", "@tacomail.com"];
+            let currentDomainIndex = 0;
+            const target = document.getElementById("domain-target");
+
+            function typeWriter(text, i, fnCallback) {
+                if (i < (text.length)) {
+                    target.innerHTML = text.substring(0, i+1);
+                    setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 100);
+                } else if (typeof fnCallback == 'function') {
+                    setTimeout(fnCallback, 2000);
+                }
+            }
+
+            function deleteWriter(text, i, fnCallback) {
+                if (i >= 0) {
+                    target.innerHTML = text.substring(0, i);
+                    setTimeout(function() { deleteWriter(text, i - 1, fnCallback) }, 50);
+                } else if (typeof fnCallback == 'function') {
+                    fnCallback();
+                }
+            }
+
+            function startTextAnimation() {
+                const text = domains[currentDomainIndex];
+                typeWriter(text, 0, function(){
+                    deleteWriter(text, text.length, function(){
+                        currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+                        startTextAnimation();
+                    });
+                });
+            }
+            startTextAnimation();
+
+            // 3. Scroll Trigger for Dashboard
+            gsap.from(".dash-card", {
+                scrollTrigger: { trigger: ".dash-card", start: "top 80%" },
+                y: 100, opacity: 0, duration: 1, ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>
