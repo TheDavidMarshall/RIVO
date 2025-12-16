@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startups Week - The Global Innovation Tour</title>
+    <!-- PAGE ICON (FAVICON) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📮</text></svg>">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -421,16 +423,32 @@
 
     <!-- HEADER & NAV -->
     <div class="top-nav">
-        <div class="brand-logo">SPAMSLAM</div>
+        <div class="text-white text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-white mt-1"></i>
+                <div class="brand-logo">powered by SpamSlam</div>
+            </div>
         <div class="hero-number">04</div>
     </div>
 
     <div class="nav-pill-wrapper">
         <div class="nav-pill">
-            <div class="pill-logo"><svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
-            <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i></div>
-            <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i></div>
-        </div>
+            <div class="pill-logo">
+                    <svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                
+                <!-- Product Dropdown -->
+                <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu"><a href="./MailRoom" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>Email Client Powered by SpamSlam</p></div></a><a href="./simswap" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a><a href="#" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Premium plans</h4><p>.pricing</p></div></a><a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a></div>
+                </div>
+
+                <!-- Resources Dropdown -->
+                <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu" style="width: 250px;"><a href="./startup-week" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-file"></i></div><div class="dd-info"><h4>Startup Week</h4></div></a><a href="./Digital-Rights-Network" class="dd-link"><div class="dd-icon resource"><i class="fa-solid fa-building-columns"></i></div><div class="dd-info"><h4>Digital Rights Network</h4></div></a><a href="./white-paper" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-clock"></i></div><div class="dd-info"><h4>Whitepaper</h4></div></a><a href="./redirect" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-circle-question"></i></div><div class="dd-info"><h4>Help</h4></div></a></div>
+                </div>
+            </div>
     </div>
 
     <!-- HERO SECTION -->
@@ -617,13 +635,23 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-inner">
-            <div style="width:200px;">
-                <b style="color:#111; letter-spacing:1px;">SPAMSLAM</b><br>
-                <span style="font-size:12px; color:#64748b;">© 2026. All rights reserved.</span>
+            <div class="footer-brand">
+
+<div class="text-black text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-black mt-1"></i>
+                <div class="brand-logo text-black"></div>
+            </div>
+                <div class="f-logo">powered by SpamSlam</div>
+                <div class="copyright">© 2025. All rights reserved.</div>
             </div>
             <div class="footer-cols">
-                <div class="f-col"><h5>Products</h5><ul><li>Mail</li><li>Auth</li><li>Privacy</li></ul></div>
-                <div class="f-col"><h5>Legal</h5><ul><li>Privacy</li><li>Terms</li></ul></div>
+                <div class="f-col"><h5>Check This</h5><ul><li><a href="uservoice.com">Request a feature</a></li><li><a href="https://www.atlassian.com/software/statuspage">System status</a></li><li><a href="#">Report a problem</a></li><li><a href="#">Report a security issue</a></li><li><a href="#">Transparency report</a></li></ul></div>
+                <div class="f-col"><h5>Join Us</h5><ul><li><a href="https://job-boards.eu.greenhouse.io/">Carrer & Internship</a></li></ul></div>
+                <div class="f-col"><h5>About Us</h5><ul><li><a href="#">Team</a></li><li><a href="#">Whitepaper</a></li><li><a href="#">Twitter</a></li></ul></div>
+                <div class="f-col"><h5>Legal</h5><ul><li><a href="./privacy-policy">Privacy policy</a></li><li><a href="./terms">Terms of service</a></li><li><a href="./responsible-ai">Acceptable use policy</a></li></ul></div>
             </div>
         </div>
     </footer>
