@@ -4,21 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MailRoom powered by SpamSlam - End-to-End Encrypted Ecosystem</title>
-        <!-- PAGE ICON (FAVICON) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+    <!-- PAGE ICON (FAVICON) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📮</text></svg>">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Re-add for BrandMail -->
     
     <!-- FontAwesome for UI Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Tailwind CSS (for BrandMail UI) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        // Tailwind Config for Integrated BrandMail UI
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Inter"', 'sans-serif'] },
+                    colors: {
+                        // E-Ink / Kindle Palette (Eye Comfort)
+                        bg: '#F7F7F0',          // Light Beige/Off-White Background
+                        panel: '#FFFFFF',       // Pure White Panels
+                        txt: '#111827',         // Deep Black Text
+                        sub: '#4B5563',         // Muted Gray Subtext
+                        accent: '#111827',      // Primary Accent (Black)
+                        brand: '#059669',       // Verified Green
+                        danger: '#EF4444'       // Standard Danger Red
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px rgba(0,0,0,0.08)',
+                        'float': '0 10px 40px -10px rgba(0,0,0,0.15)',
+                        'glow': '0 0 10px rgba(17, 24, 39, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
         /* 
          * ==========================================
-         * 1. RESET & VARIABLES
+         * 1. RESET & VARIABLES (SOURCE CODE)
          * ==========================================
          */
         :root {
@@ -60,6 +96,7 @@
             --radius-lg: 20px;
         }
 
+        /* --- GLOBAL RESET (SOURCE CODE) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -68,9 +105,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -80,24 +115,9 @@
             overflow-x: hidden;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        button {
-            border: none;
-            outline: none;
-            background: none;
-            font-family: inherit;
-            cursor: pointer;
-        }
+        a { text-decoration: none; color: inherit; cursor: pointer; transition: color 0.2s ease; }
+        ul { list-style: none; }
+        button { border: none; outline: none; background: none; font-family: inherit; cursor: pointer; }
 
         /* Typography Utilities */
         .font-serif { font-family: 'DM Serif Display', serif; }
@@ -108,18 +128,16 @@
 
         /* 
          * ==========================================
-         * 2. HEADER & HERO SECTION
+         * 2. HEADER & HERO SECTION (SOURCE CODE)
          * ==========================================
          */
         .hero-wrapper {
             background-color: var(--color-blue-brand);
-            /* Extended padding bottom to allow app mockup overlap */
             padding-bottom: 160px; 
             position: relative;
             width: 100%;
         }
 
-        /* Top Navigation Bar */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -144,7 +162,7 @@
             line-height: 1;
         }
 
-        /* Floating Navigation Pill */
+        /* Floating Navigation Pill (SOURCE CODE) */
         .nav-pill-wrapper {
             position: absolute;
             top: 32px;
@@ -168,7 +186,7 @@
         .pill-logo {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #FF7043, #E64A19);
+            background: linear-gradient(135deg, #1830f0, #4bbdf6);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -189,20 +207,9 @@
             gap: 8px;
             cursor: pointer;
             position: relative;
-            height: 40px; /* Expands hover area */
+            height: 40px; 
         }
 
-        .nav-item i { 
-            font-size: 10px; 
-            color: #888; 
-            transition: transform 0.2s; 
-        }
-
-        .nav-item:hover i { 
-            transform: rotate(180deg); 
-        }
-
-        /* Dropdown Menus */
         .dropdown-menu {
             position: absolute;
             top: 50px;
@@ -327,7 +334,7 @@
          * ==========================================
          */
         .app-mockup {
-            background: white;
+            background: var(--color-white);
             margin: 0 40px;
             /* Negative margin to pull it up over the blue background */
             margin-top: -100px; 
@@ -340,136 +347,15 @@
             position: relative;
             z-index: 5;
             border-bottom: 1px solid #eee;
+            /* Container for Integrated BrandMail UI */
+            padding: 0;
+            gap: 0;
         }
-
-        /* Sidebar Styles */
-        .app-sidebar {
-            width: 240px;
-            background: #F8F9FA;
-            border-right: 1px solid var(--border-color);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .user-profile-icon { font-size: 22px; color: var(--color-blue-brand); }
-        .user-text h3 { font-size: 14px; font-weight: 600; color: #333; }
-        .user-text span { font-size: 12px; color: #888; }
-
-        .btn-compose {
-            width: 100%;
-            background: white;
-            border: 1px solid #E0E0E0;
-            padding: 10px 14px;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
-            transition: all 0.2s;
-        }
-
-        .btn-compose:hover { 
-            border-color: #ccc; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
-        }
-
-        .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
-        
-        .menu-item {
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-
-        .menu-item:hover { background: #EAEAEA; }
-        .menu-item.active { background: #E3E3E3; color: black; font-weight: 600; }
-        .menu-item i { width: 16px; text-align: center; }
-
-        /* Inbox List Styles */
-        .app-inbox {
-            flex: 1;
-            background: white;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .inbox-header {
-            padding: 20px 32px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-        }
-
-        .inbox-title { font-size: 18px; font-weight: 700; color: #000; }
-        .inbox-count { font-size: 18px; font-weight: 700; color: var(--color-orange); }
-
-        .inbox-rows { flex: 1; overflow-y: hidden; }
-
-        .email-row {
-            display: flex;
-            align-items: center;
-            padding: 14px 32px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-
-        .email-row:hover { background: #FAFAFA; }
-        
-        .row-checkbox {
-            width: 18px; height: 18px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            margin-right: 16px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .email-row.checked .row-checkbox {
-            background: var(--color-orange);
-            border-color: var(--color-orange);
-        }
-
-        .email-row.checked .row-checkbox::after {
-            content: '✓'; color: white; font-size: 11px; font-weight: 900;
-        }
-
-        .row-avatar {
-            width: 36px; height: 36px;
-            border-radius: 8px;
-            margin-right: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-        }
-        
-        .row-content { flex: 1; display: flex; align-items: center; font-size: 14px; }
-        .row-sender { width: 180px; font-weight: 600; color: #222; }
-        .row-subject { color: #444; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
-        .row-dot { width: 6px; height: 6px; background: var(--color-orange); border-radius: 50%; margin-right: 10px; }
 
 
         /* 
          * ==========================================
-         * 4. MAIN CONTAINER & SECTIONS
+         * 4. MAIN CONTAINER & SECTIONS (SOURCE CODE)
          * ==========================================
          */
         .main-container {
@@ -515,7 +401,55 @@
             background-color: var(--color-blue-dark);
         }
 
+        /* 
+         * ==========================================
+         * 5. BRANDMAIL UI STYLES (INTEGRATED)
+         * ==========================================
+         */
+        .brandmail-ui {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 16px;
+            gap: 16px;
+            background-color: var(--tw-colors-bg);
+        }
 
+        /* Set base width/height for BrandMail containers */
+        .brandmail-list-section { height: calc(100% - 16px); }
+        .brandmail-center-panel { height: calc(100% - 16px); }
+        .brandmail-widgets { height: calc(100% - 16px); }
+
+        /* Custom E-Ink UI Panel */
+        .ui-panel {
+            background-color: var(--tw-colors-panel);
+            color: var(--tw-colors-txt);
+            border-radius: 1rem;
+            box-shadow: var(--tw-shadow-soft);
+            border: 1px solid #E5E7EB;
+        }
+
+        /* Selected State - FIXING CONTRAST */
+        .selected-card {
+            background-color: var(--tw-colors-accent) !important;
+            color: white !important;
+            box-shadow: 0 0 15px rgba(17, 24, 39, 0.3) !important;
+        }
+        .selected-card .text-sub, .selected-card .text-gray-400 { color: #D1D5DB !important; }
+        .selected-card .bg-white { background-color: #374151 !important; border-color: #6B7280 !important; }
+        
+        /* Thread Styling */
+        .thread-line {
+            position: absolute; left: 24px; top: 60px; bottom: 0px; width: 2px; background: #E5E7EB; z-index: 0;
+        }
+        .thread-item:last-child .thread-line { display: none; }
+        
+        /* Utility */
+        .custom-scroll { overflow-y: auto; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+        
         /* 
          * ==========================================
          * 5. NEW: SPAMSLAM DASHBOARD SECTION
@@ -1132,19 +1066,26 @@
         .f-col ul li { margin-bottom: 14px; }
         .f-col a { font-size: 14px; color: #333; transition: color 0.2s; }
         .f-col a:hover { color: var(--color-blue-brand); }
-
+        /* ... (rest of the SOURCE CODE styles are assumed to be present) ... */
     </style>
 </head>
 <body>
 
-    <!-- HERO SECTION -->
+    <!-- HERO SECTION (SOURCE CODE) -->
     <div class="hero-wrapper">
         <nav class="top-nav">
-            <div class="brand-logo">MailRoom <br> powered by SpamSlam</div>
-            <div class="hero-number">01</div>
+
+            <div class="text-white text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-white mt-1"></i>
+                <div class="brand-logo">powered by SpamSlam</div>
+            </div>
+          <div class="hero-number">01</div>
         </nav>
 
-        <!-- FLOATING NAVIGATION (Pill) -->
+        <!-- FLOATING NAVIGATION (Pill) - SOURCE CODE -->
         <div class="nav-pill-wrapper">
             <div class="nav-pill">
                 <div class="pill-logo">
@@ -1152,37 +1093,13 @@
                 </div>
                 
                 <!-- Product Dropdown -->
-                <div class="nav-item">
-                    Product <i class="fa-solid fa-chevron-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="./MailRoom" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>Email Client Powered by SpamSlam</p></div></a>
-                        <a href="./simswap" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a>
-                        <a href="#" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Privacy Heros</h4><p>...</p></div></a>
-                        <a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a>
-                    </div>
+                <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu"><a href="./MailRoom" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>Email Client Powered by SpamSlam</p></div></a><a href="./simswap" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a><a href="#" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Premium plans</h4><p>.pricing</p></div></a><a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a></div>
                 </div>
 
-                <!-- Resources Dropdown (UPDATED) -->
-                <div class="nav-item">
-                    Resources <i class="fa-solid fa-chevron-down"></i>
-                    <div class="dropdown-menu" style="width: 250px;">
-                        <a href="./startup-week" class="dd-link">
-                            <div class="dd-icon resource"><i class="fa-regular fa-file"></i></div>
-                            <div class="dd-info"><h4>Startup Week</h4></div>
-                        </a>
-                        <a href="./Digital-Rights-Network" class="dd-link">
-                            <div class="dd-icon resource"><i class="fa-solid fa-building-columns"></i></div>
-                            <div class="dd-info"><h4>Digital Rights Network</h4></div>
-                        </a>
-                        <a href="./white-paper" class="dd-link">
-                            <div class="dd-icon resource"><i class="fa-regular fa-clock"></i></div>
-                            <div class="dd-info"><h4>Whitepaper</h4></div>
-                        </a>
-                        <a href="./redirect" class="dd-link">
-                            <div class="dd-icon resource"><i class="fa-regular fa-circle-question"></i></div>
-                            <div class="dd-info"><h4>Help</h4></div>
-                        </a>
-                    </div>
+                <!-- Resources Dropdown -->
+                <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu" style="width: 250px;"><a href="./startup-week" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-file"></i></div><div class="dd-info"><h4>Startup Week</h4></div></a><a href="./Digital-Rights-Network" class="dd-link"><div class="dd-icon resource"><i class="fa-solid fa-building-columns"></i></div><div class="dd-info"><h4>Digital Rights Network</h4></div></a><a href="./white-paper" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-clock"></i></div><div class="dd-info"><h4>Whitepaper</h4></div></a><a href="./redirect" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-circle-question"></i></div><div class="dd-info"><h4>Help</h4></div></a></div>
                 </div>
             </div>
         </div>
@@ -1200,36 +1117,273 @@
         </div>
     </div>
 
-    <!-- APP MOCKUP -->
+    <!-- APP MOCKUP (FULL BRANDMAIL UI INTEGRATED HERE) -->
     <div class="app-mockup">
-        <div class="app-sidebar">
-            <div class="user-profile">
-                <i class="fa-solid fa-envelope-open-text user-profile-icon"></i>
-                <div class="user-text"><h3>Mia</h3><span>Mia@mailroom.com</span></div>
-            </div>
-            <button class="btn-compose"><i class="fa-solid fa-pen-nib"></i> Compose</button>
-            <div class="sidebar-menu">
-                <div style="padding:10px 12px;color:#999;font-size:13px;display:flex;gap:10px;"><i class="fa-solid fa-magnifying-glass"></i> Search</div>
-                <div class="menu-item active"><i class="fa-solid fa-inbox"></i> Inbox</div>
-                <div class="menu-item"><i class="fa-regular fa-paper-plane"></i> Sent</div>
-                <div class="menu-item"><i class="fa-regular fa-file"></i> Draft</div>
-                <div class="menu-item"><i class="fa-solid fa-box-archive"></i> Archive</div>
-                <div class="menu-item"><i class="fa-regular fa-trash-can"></i> Trash</div>
-            </div>
-        </div>
+        <div class="brandmail-ui">
+            
+            <!-- 1. EMAIL LIST -->
+            <section class="brandmail-list-section w-[300px] flex flex-col shrink-0">
+                
+                <!-- Search Bar -->
+                <div class="ui-panel h-14 flex items-center px-4 shadow-soft gap-3 rounded-xl shrink-0">
+                    <i class="ph-bold ph-magnifying-glass text-sub text-lg"></i>
+                    <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search mail" class="bg-transparent outline-none w-full text-sm font-medium placeholder-gray-400">
+                    <i class="ph-bold ph-sliders-horizontal text-sub cursor-pointer hover:text-accent"></i>
+                </div>
+                
+                <!-- List Header + Toggle -->
+                <div class="flex justify-between items-center px-2">
+                    <h3 class="text-sm font-bold text-sub uppercase tracking-wider">Inbox</h3>
+                     <button onclick="toggleRightSidebar()" class="px-3 py-1 rounded-full bg-panel border border-gray-300 flex items-center gap-1 hover:bg-gray-100 text-sub transition-colors" title="Toggle Widget Sidebar">
+                         <i class="ph-bold ph-arrows-left-right text-base"></i>
+                         <span id="toggle-text">Hide Widgets</span>
+                    </button>
+                </div>
 
-        <div class="app-inbox">
-            <div class="inbox-header"><span class="inbox-title">Inbox</span><span class="inbox-count">5</span></div>
-            <div style="padding:10px 32px; font-size:11px; color:#ccc; text-transform:uppercase;">Most recent</div>
-            <div class="inbox-rows">
-                <div class="email-row checked"><div class="row-checkbox"></div><div class="row-avatar" style="background:#E1BEE7;">🤖</div><div class="row-content"><div class="row-sender">Heinrich Lox</div><div class="row-subject"><b>Update to engineering status</b> – Hey all, After touching...</div></div></div>
-                <div class="email-row checked"><div class="row-checkbox"></div><div class="row-avatar" style="background:#222; color:white;">🐼</div><div class="row-content"><div class="row-sender">Angelina</div><div class="row-subject"><b>Product strategy sync</b> – Hey Jo, will you be joining...</div></div></div>
-                <div class="email-row"><div class="row-checkbox"></div><div class="row-avatar" style="background:#FFF9C4;">🐱</div><div class="row-content"><div class="row-dot"></div><div class="row-sender">Jason, Sunny</div><div class="row-subject"><b>Rewind Feature Eng Sync</b> – I'm not entirely sure I agree...</div></div></div>
-                <div class="email-row"><div class="row-checkbox"></div><div class="row-avatar" style="background:#F8BBD0;">🧠</div><div class="row-content"><div class="row-sender">0x600f...er2</div><div class="row-subject">Where to find contract agreement? – Hey Jason, you mentioned...</div></div></div>
-                 <div class="email-row"><div class="row-checkbox"></div><div class="row-avatar" style="background:#C8E6C9;">🐸</div><div class="row-content"><div class="row-dot"></div><div class="row-sender">Tony, Paulie</div><div class="row-subject"><b>Upcoming event</b> – Don't miss out! Join us for...</div></div></div>
+                <!-- Scrollable List -->
+                <div class="flex-1 overflow-y-auto custom-scroll space-y-3 pb-2 pr-1" id="email-list-container">
+                    <!-- Items injected by JS -->
+                </div>
+                
+                <!-- Email Count Badge -->
+                <div class="text-center text-xs text-sub font-medium p-2 border-t border-gray-200 mt-auto">
+                     <span id="list-count">0</span> Emails Displayed
+                </div>
+            </section>
+
+            <!-- 2. CENTER (Reading Pane) -->
+            <section id="center-panel" class="flex-1 ui-panel p-8 relative flex flex-col overflow-hidden transition-all duration-300">
+                
+                <!-- Header Actions (Visible only when email is selected) -->
+                <div id="read-header-actions" class="flex justify-between items-center mb-6 shrink-0 border-b border-gray-200 pb-4 hidden">
+                    <div class="flex items-center gap-2 text-xs font-bold text-accent bg-gray-100 px-3 py-1.5 rounded-full uppercase tracking-wider">
+                        <i class="ph-fill ph-check-circle text-brand mr-1"></i>
+                        AUTHENTICATED
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"><i class="ph-bold ph-printer text-sub"></i></button>
+                        <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"><i class="ph-bold ph-trash text-sub"></i></button>
+                    </div>
+                </div>
+
+                <!-- Scrollable Content -->
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4" id="reading-content">
+                    <!-- Content will be fully managed by selectEmail function -->
+                </div>
+
+                <!-- Reply Box (Fixed Bottom) -->
+                <div id="reply-box" class="mt-4 bg-gray-100 rounded-2xl p-2 flex items-center gap-3 pr-4 shrink-0 border border-gray-200 hidden">
+                    <div class="flex gap-1 px-2 text-sub">
+                        <button class="p-2 hover:text-accent"><i class="ph-bold ph-link"></i></button>
+                        <button class="p-2 hover:text-accent"><i class="ph-bold ph-image"></i></button>
+                    </div>
+                    <input type="text" placeholder="Start typing your reply here..." class="bg-transparent flex-1 outline-none text-sm font-medium text-txt placeholder-gray-400">
+                    <button class="w-10 h-10 bg-accent text-white rounded-xl flex items-center justify-center hover:scale-105 transition shadow-lg">
+                        <i class="ph-bold ph-paper-plane-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 bg-white">
+                    <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-accent/50 mb-4">
+                         <i class="ph-bold ph-book-open-text text-5xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-txt">Mailroom</h2>
+                    <p class="text-sub">Select an email to start reading.</p>
+                </div>
+            </section>
+
+            <!-- 3. RIGHT SIDEBAR (Widgets) -->
+            <aside id="right-sidebar" class="w-80 flex flex-col gap-4 shrink-0 transition-all duration-300">
+                
+                <!-- Header -->
+                <div class="flex items-center justify-end px-2 gap-2">
+                    <button onclick="toggleModal('compose-modal')" class="bg-accent text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg hover:scale-105 transition flex items-center gap-2">
+                        <i class="ph-bold ph-plus"></i> New email
+                    </button>
+                </div>
+
+                <!-- Widgets Container -->
+                <div class="flex-1 overflow-y-auto no-scroll space-y-4">
+                    
+                    <!-- SPAMSLAM WIDGET -->
+                    <div class="ui-panel p-6 shadow-soft relative overflow-hidden group border border-gray-200 hover:border-danger transition-colors">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-danger/10 rounded-bl-[3rem] -z-0 transition-transform group-hover:scale-110"></div>
+                        
+                        <div class="flex justify-between items-start mb-2 relative z-10">
+                            <h3 class="font-bold text-sm flex items-center gap-2"><i class="ph-fill ph-shield-warning text-danger"></i> SpamSlam™</h3>
+                            <span class="bg-danger/10 text-danger text-[10px] font-bold px-2 py-0.5 rounded">Action Needed</span>
+                        </div>
+                        
+                        <p class="text-[10px] text-sub mb-4 relative z-10 w-3/4">Decide which companies you need and reclaim the ones you don't.</p>
+                        
+                        <div class="flex items-center justify-between mb-4 relative z-10">
+                            <div>
+                                <div class="text-4xl font-black text-txt tracking-tighter">420</div>
+                                <div class="text-[10px] text-sub font-medium leading-tight">companies found<br>in your footprint</div>
+                            </div>
+                            <div class="w-10 h-10 bg-danger rounded-full flex items-center justify-center text-white text-lg shadow-lg animate-pulse">
+                                <i class="ph-bold ph-warning-octagon"></i>
+                            </div>
+                        </div>
+
+                        <a href="#spamslam-link" target="_blank" class="w-full bg-accent text-white py-3 rounded-xl text-xs font-bold hover:bg-accent/80 transition-colors shadow-md relative z-10 flex items-center justify-center">
+                            Take action
+                        </a>
+                    </div>
+
+                    <!-- EVENTS WIDGET -->
+                    <div class="ui-panel p-6 shadow-soft">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-sm"><i class="ph-fill ph-calendar-blank mr-2 text-accent"></i> Events</h3>
+                            <span class="text-xs text-sub">Today, Feb 17</span>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl p-4 border border-gray-200">
+                            <div class="text-xs font-bold text-sub mb-4">David Kovington</div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-sm">Project Meeting</div>
+                                    <div class="text-[10px] text-sub">09:00 AM - 10:00 AM</div>
+                                </div>
+                                <div class="flex -space-x-2">
+                                    <img src="https://i.pravatar.cc/100?img=5" class="w-6 h-6 rounded-full border-2 border-panel">
+                                    <img src="https://i.pravatar.cc/100?img=8" class="w-6 h-6 rounded-full border-2 border-panel">
+                                    <div class="w-6 h-6 rounded-full bg-accent text-white text-[8px] flex items-center justify-center border-2 border-panel">+5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STORAGE WIDGET -->
+                    <div class="ui-panel p-6 shadow-soft">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-sm"><i class="ph-fill ph-cloud mr-2 text-accent"></i> Storage</h3>
+                            <span class="text-[10px] bg-gray-100 px-2 py-1 rounded text-sub font-bold">Free Account</span>
+                        </div>
+                        <div class="flex justify-between items-end mb-2">
+                            <span class="text-2xl font-bold">7%</span>
+                            <span class="text-[10px] text-sub mb-1">70 MB / 1 GB</span>
+                        </div>
+                        <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-accent w-[7%] rounded-full"></div>
+                        </div>
+                        <button onclick="toggleModal('pro-modal')" class="w-full text-xs text-accent font-bold border border-accent/50 rounded-xl py-2 hover:bg-gray-100 transition">Upgrade Plan</button>
+                    </div>
+
+                    <!-- GO PRO WIDGET -->
+                    <div class="bg-gradient-to-br from-accent to-gray-500 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform" onclick="toggleModal('pro-modal')">
+                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-white/20 rounded-full blur-xl"></div>
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="w-8 h-8 bg-black/50 rounded-lg flex items-center justify-center"><i class="ph-bold ph-crown text-accent"></i></div>
+                            <span class="bg-white text-black text-[10px] font-black px-2 py-1 rounded-md">$3/mo</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight mb-1">Go Pro</h3>
+                        <p class="text-[10px] text-white/80">Get unlimited aliases & AI features.</p>
+                    </div>
+
+
+                    <!-- TASKS (Kept at bottom) -->
+                    <div class="ui-panel p-6 shadow-soft">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-sm"><i class="ph-fill ph-check-circle mr-2 text-accent"></i> Tasks</h3>
+                            <i class="ph-bold ph-plus text-xs cursor-pointer"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-100 rounded-xl border border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-5 bg-accent rounded-full relative cursor-pointer"><div class="w-3 h-3 bg-white rounded-full absolute right-1 top-1"></div></div>
+                                    <div>
+                                        <div class="text-xs font-bold">Review Spam</div>
+                                        <div class="text-[10px] text-sub">Today</div>
+                                    </div>
+                                </div>
+                                <span class="bg-red-100 text-red-500 text-[10px] font-bold px-2 py-1 rounded-md">Urgent</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+
+    <!-- AUTHENTICITY TOOLTIP -->
+    <div id="auth-tooltip" class="fixed hidden z-50 pointer-events-none">
+        <div class="ui-panel rounded-2xl p-5 shadow-2xl w-72 border border-gray-300 tooltip-anim">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-gray-100 rounded-lg p-1.5 flex items-center justify-center border border-gray-200">
+                    <img id="tt-logo" src="" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h4 id="tt-brand" class="font-bold text-sm text-txt">Brand</h4>
+                    <span class="text-[10px] bg-blue-50 text-blue-500 px-1.5 py-0.5 rounded font-bold uppercase">Official</span>
+                </div>
+            </div>
+            <div class="text-[11px] text-gray-500 leading-snug">
+                This domain <span id="tt-domain" class="font-mono text-accent">domain.com</span> is verified via DMARC & DKIM.
+            </div>
+            <div class="mt-3 h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-brand w-[98%]"></div>
+            </div>
+            <div class="flex justify-between mt-1 text-[9px] text-gray-400 font-medium">
+                <span>Trust Score</span>
+                <span class="text-brand">98/100</span>
             </div>
         </div>
     </div>
+
+    <!-- MODALS -->
+    <div id="spam-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden" onclick="toggleModal('spam-modal')">
+        <div class="ui-panel w-[500px] rounded-3xl shadow-2xl p-8 tooltip-anim relative overflow-hidden" onclick="event.stopPropagation()">
+            <div class="absolute top-0 left-0 w-full h-2 bg-danger"></div>
+            <h2 class="text-2xl font-black text-txt mb-2">Digital Footprint</h2>
+            <p class="text-sm text-gray-500 mb-6">These companies are trading your data.</p>
+            <div class="space-y-3 mb-6 max-h-60 overflow-y-auto custom-scroll">
+                <div class="flex justify-between items-center p-3 bg-gray-100 rounded-xl border border-gray-200">
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <div class="flex items-center gap-3"><div class="w-8 h-8 bg-white rounded flex items-center justify-center text-lg">🍕</div><div class="text-sm font-bold">Pizza Hut</div></div>
+                        <button class="text-xs bg-danger/20 text-danger px-3 py-1.5 rounded-lg font-bold hover:bg-danger/30">Reclaim</button>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleModal('spam-modal')" class="w-full bg-accent text-white py-3 rounded-xl font-bold">Done</button>
+        </div>
+    </div>
+
+    <div id="pro-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden" onclick="toggleModal('pro-modal')">
+        <div class="ui-panel w-[400px] rounded-3xl shadow-2xl p-8 tooltip-anim text-center" onclick="event.stopPropagation()">
+            <div class="w-16 h-16 bg-accent text-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-accent/50">
+                <i class="ph-fill ph-crown"></i>
+            </div>
+            <h2 class="text-3xl font-black mb-2">Go Pro</h2>
+            <div class="text-5xl font-black mb-1">$3<span class="text-lg text-gray-400 font-medium">/mo</span></div>
+            <p class="text-xs text-gray-400 mb-8">Billed annually</p>
+            <button onclick="toggleModal('pro-modal')" class="w-full bg-accent text-white py-4 rounded-xl font-bold shadow-lg hover:scale-105 transition-transform">Upgrade Now</button>
+        </div>
+    </div>
+
+    <div id="compose-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm hidden" onclick="toggleModal('compose-modal')">
+        <div class="ui-panel w-[600px] rounded-3xl shadow-2xl p-6 tooltip-anim" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold">New Message</h2>
+                <button onclick="toggleModal('compose-modal')"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+            <input type="text" placeholder="To" class="w-full border-b border-gray-300 bg-transparent py-2 outline-none text-sm mb-2 placeholder-gray-400">
+            <input type="text" placeholder="Subject" class="w-full border-b border-gray-300 bg-transparent py-2 outline-none font-bold text-lg mb-4 placeholder-gray-400">
+            <textarea class="w-full h-40 outline-none text-sm resize-none bg-transparent placeholder-gray-400" placeholder="Write your message..."></textarea>
+            <div class="flex justify-between items-center mt-4">
+                <div class="flex gap-3 text-sub">
+                    <i class="ph-bold ph-paperclip text-lg hover:text-txt cursor-pointer"></i>
+                    <i class="ph-bold ph-image text-lg hover:text-txt cursor-pointer"></i>
+                </div>
+                <button onclick="toggleModal('compose-modal')" class="bg-accent text-white px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition">Send</button>
+            </div>
+        </div>
+    </div>
+ </div> <!-- double-div trick worked to make the code below appear -->
+ </div>
+
+
+
 
     <!-- MAIN CONTENT CONTAINER -->
     <div class="main-container">
@@ -1256,7 +1410,7 @@
                     <span class="dash-nav-link">My reclaims</span>
                     <div class="dash-divider"></div>
                     <span class="dash-nav-link">Spread the word</span>
-                    <span class="dash-nav-link">Blog</span>
+                    <span class="dash-nav-link"> Back To Email</span>
                 </div>
 
                 <!-- Dashboard Content -->
@@ -1542,8 +1696,8 @@
 
         <!-- BENEFITS GRID -->
         <div class="benefits-section">
+            <div class="benefit"><h4>Your Internet life, but less stressy</h4><p>Take out digital trash with one tap</p></div>
             <div class="benefit"><h4>Tap to Sign In (Forget SMS Codes)</h4><p>Goodbye SMS codes; hello instant, ultra-secure approval</p></div>
-            <div class="benefit"><h4>we</h4><p>we</p></div>
             <div class="benefit"><h4>No More Lost Access or “Which Account Uses What Number?</h4><p>We stop one of the most common identity attacks with a 24-hour number-change delay, real-time alerts, and a checkpoint system that keeps control in the user’s hands.</p></div>
             <div class="benefit"><h4>A Secure Identity Layer for the Entire Internet</h4><p>Our push-sign-in and digital OTP give websites a safer, cheaper, privacy-respecting alternative to SMS</p></div>
             <div class="benefit"><h4>Built to Crush SIM-Swap Attacks</h4><p>Your logins don’t depend on your phone number. attackers can’t break in by stealing it.</p></div>
@@ -1576,24 +1730,34 @@
     <footer>
         <div class="footer-inner">
             <div class="footer-brand">
-                <div class="f-logo"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg> SpamSlam</div>
+
+<div class="text-black text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-black mt-1"></i>
+                <div class="brand-logo text-black"></div>
+            </div>
+                <div class="f-logo">powered by SpamSlam</div>
                 <div class="copyright">© 2025. All rights reserved.</div>
             </div>
             <div class="footer-cols">
-                <div class="f-col"><h5>Products</h5><ul><li><a href="#">I</a></li><li><a href="#">II</a></li><li><a href="#">III</a></li><li><a href="#">IV</a></li></ul></div>
-                <div class="f-col"><h5>Resources</h5><ul><li><a href="#">Changelog</a></li></ul></div>
-                <div class="f-col"><h5>Developer</h5><ul><li><a href="#">GitHub</a></li><li><a href="#">Whitepaper</a></li><li><a href="#">Report an issue</a></li></ul></div>
+                <div class="f-col"><h5>Check This</h5><ul><li><a href="uservoice.com">Request a feature</a></li><li><a href="https://www.atlassian.com/software/statuspage">System status</a></li><li><a href="#">Report a problem</a></li><li><a href="#">Report a security issue</a></li><li><a href="#">Transparency report</a></li></ul></div>
+                <div class="f-col"><h5>Join Us</h5><ul><li><a href="https://job-boards.eu.greenhouse.io/">Carrer & Internship</a></li></ul></div>
+                <div class="f-col"><h5>About Us</h5><ul><li><a href="#">Team</a></li><li><a href="#">Whitepaper</a></li><li><a href="#">Twitter</a></li></ul></div>
                 <div class="f-col"><h5>Legal</h5><ul><li><a href="./privacy-policy">Privacy policy</a></li><li><a href="./terms">Terms of service</a></li><li><a href="./responsible-ai">Acceptable use policy</a></li></ul></div>
             </div>
         </div>
     </footer>
 
-    <!-- 
+   <!-- 
      * ==========================================
      * 10. INTERACTIVE JAVASCRIPT
      * ==========================================
      -->
+
     <script>
+
         // Configuration for the IntersectionObserver
         const observerOptions = {
             root: null, // viewport
@@ -1682,7 +1846,276 @@
             };
             window.requestAnimationFrame(step);
         }
-    </script>
 
+
+
+        // --- 1. SIMULATED CONTENT DATABASE (The "Separate File") ---
+        const PEOPLE_PROFILES = [
+            { name: "Brendan Walsh", logo: "https://i.pravatar.cc/100?img=25", domain: "brendan.co", role: "UX Designer", snippet: "Potential Office Review - Let's look at the documents." },
+            { name: "Adriana Livingston", logo: "https://i.pravatar.cc/100?img=33", domain: "adriana.com", role: "Sales Lead", snippet: "Business Offer - Need help in proving your social media?" },
+            { name: "Donny Richards", logo: "https://i.pravatar.cc/100?img=42", domain: "donny-rich.dev", role: "Dev Team", snippet: "Team Stand Up - 09:45 AM - 10:15 AM." },
+        ];
+        
+        const BRAND_PROFILES = {
+            amazon: {
+                logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", domain: "amazon.com", name: "Amazon",
+                thread: [
+                    { time: "Yesterday, 4:00 PM", subject: "Delivered: Your package was left near the front door", body: "Hi David, your package has been delivered. The carrier left it in a secure location. You can rate your delivery experience." },
+                    { time: "Yesterday, 8:00 AM", subject: "Out for delivery", body: "Good news! Your package is out for delivery and will arrive by 8 PM today." },
+                ]
+            },
+            figma: {
+                logo: "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg", domain: "figma.com", name: "Figma",
+                thread: [
+                    { time: "10:30 AM", subject: "Sarah mentioned you in 'Dashboard V2'", body: "@David check the padding on this component. I think it needs to be 24px." },
+                    { time: "9:15 AM", subject: "Reply from David", body: "Fixed! I updated the auto-layout settings. Let me know what you think." },
+                ]
+            },
+            stripe: {
+                logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg", domain: "stripe.com", name: "Stripe",
+                single: `<p>Hey David,</p><h3 class="font-bold mb-2">Payout is on the way</h3><p class="mb-4">A payout of <span class="font-bold text-lg">$2,450.00</span> has been initiated to your bank account ending in 8842. Expect funds by Nov 23.</p><p>Best,<br>The Stripe Team.</p>`
+            },
+        };
+
+        // --- GLOBAL STATE & DATA ---
+        let allEmails = [];
+        let filteredEmails = [];
+        let selectedEmailId = null;
+
+        // --- GENERATE DATA FUNCTION ---
+        function generateEmails() {
+            const allSources = [...PEOPLE_PROFILES, ...Object.values(BRAND_PROFILES)];
+            
+            // Generate 50 Emails
+            for (let i = 1; i <= 50; i++) {
+                const sourceIndex = i % allSources.length;
+                const source = allSources[sourceIndex];
+                
+                const isPerson = source.role !== undefined;
+                const isThread = source.thread !== undefined;
+                
+                const title = isPerson 
+                    ? (source.snippet || `Meeting Reminder - ${source.name}`)
+                    : (isThread ? source.thread[0].subject : (source.single.match(/<h[2-3][^>]*>(.*?)<\/h[2-3]>/)?.[1] || `Notification #${i}`));
+                
+                const snippet = isPerson 
+                    ? source.snippet
+                    : (isThread ? source.thread[0].body.substring(0, 50) + "..." : source.single.replace(/<[^>]*>?/gm, '').substring(0, 50) + "...");
+                
+                const time = `${Math.floor(Math.random() * 12) + 1}:${Math.floor(Math.random() * 59).toString().padStart(2,'0')} ${Math.random() > 0.5 ? 'AM' : 'PM'}`;
+
+                allEmails.push({
+                    id: i,
+                    dbKey: isPerson ? null : source.name.toLowerCase(),
+                    name: source.name,
+                    domain: source.domain,
+                    logo: source.logo,
+                    title: title,
+                    snippet: snippet,
+                    time: time,
+                    isThread: isThread,
+                    isPerson: isPerson,
+                    threadCount: isThread ? source.thread.length : 1,
+                    role: source.role || 'Service Team',
+                    emailBody: isPerson ? `<p>Hello David,</p><p>This is a follow-up to our meeting request. The team is ready to review your documents. Please confirm your availability this week.</p><p>Best,<br>${source.name}</p>` : null
+                });
+            }
+            filteredEmails = [...allEmails];
+        }
+
+        // --- 2. RENDER FUNCTIONS ---
+        function renderList(data = filteredEmails) {
+            const container = document.getElementById('email-list-container');
+            container.innerHTML = '';
+            
+            document.getElementById('list-count').innerText = data.length;
+
+            data.forEach(email => {
+                const isSelected = email.id === selectedEmailId;
+                const card = document.createElement('div');
+                
+                let classes = "p-3 rounded-xl cursor-pointer transition-all duration-200 relative border border-transparent ";
+                classes += isSelected ? "selected-card shadow-lg" : "ui-panel hover:bg-gray-100 border-gray-200";
+
+                card.className = classes;
+                card.onclick = () => selectEmail(email.id);
+
+                // Thread Badge
+                const threadBadge = email.isThread 
+                    ? `<div class="flex items-center justify-center w-5 h-5 rounded-full bg-accent text-white text-[10px] font-bold absolute -top-1 -right-1 border-2 border-panel">${email.threadCount}</div>`
+                    : '';
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <div class="flex items-center gap-3">
+                            <div class="relative z-10 p-1 bg-white rounded-full border border-gray-300 w-8 h-8 flex items-center justify-center shrink-0"
+                                 onmouseenter="showTooltip(event, ${email.id})" 
+                                 onmouseleave="hideTooltip()"
+                                 onclick="event.stopPropagation()">
+                                <img src="${email.logo}" class="w-full h-full object-contain ${email.isPerson ? 'rounded-full' : ''}">
+                                ${threadBadge}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="font-bold text-sm leading-tight truncate ${isSelected ? 'text-white' : 'text-txt'}">${email.name}</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[10px] font-bold ${isSelected ? 'text-gray-400' : 'text-sub'}">${email.time}</span>
+                            <i class="ph-bold ph-star text-base ${isSelected ? 'text-gray-400' : 'text-sub'} mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="font-bold text-xs mb-1 truncate ${isSelected ? 'text-white' : 'text-txt'}">${email.title}</div>
+                    <div class="text-xs truncate mb-3 ${isSelected ? 'text-gray-400' : 'text-sub'}">${email.snippet}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectEmail(id) {
+            selectedEmailId = id;
+            renderList(filteredEmails); // Refresh styling
+            
+            const emailMeta = allEmails.find(e => e.id === id);
+            const dbEntry = emailMeta.isPerson ? emailMeta : BRAND_PROFILES[emailMeta.dbKey];
+            const contentContainer = document.getElementById('reading-content');
+
+            // Show reading pane elements
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('reply-box').classList.remove('hidden');
+            document.getElementById('read-header-actions').classList.remove('hidden');
+
+            // 1. Build Dynamic Body
+            let dynamicBodyHTML = '';
+
+            if (emailMeta.isThread) {
+                // THREAD VIEW
+                let threadItemsHTML = '';
+                [...dbEntry.thread].reverse().forEach((msg, idx) => {
+                    threadItemsHTML += `
+                        <div class="thread-item relative pl-12">
+                            <div class="thread-line"></div>
+                            <div class="absolute left-0 top-0 w-8 h-8 bg-gray-100 rounded-full border border-gray-300 flex items-center justify-center text-xs font-bold z-10">
+                                <i class="ph-bold ph-envelope-simple text-sub"></i>
+                            </div>
+                            <div class="bg-gray-100 border border-gray-200 p-4 rounded-xl shadow-sm ml-2">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-sm font-bold text-txt">${msg.subject}</h4>
+                                    <span class="text-xs text-gray-500 font-mono">${msg.time}</span>
+                                </div>
+                                <div class="text-sm text-gray-600 leading-relaxed">${msg.body}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                dynamicBodyHTML = `<div class="max-w-4xl mx-auto pb-10 space-y-8"><div class="relative w-full space-y-8">${threadItemsHTML}</div></div>`;
+            } else {
+                // SINGLE MESSAGE VIEW
+                dynamicBodyHTML = `
+                    <div class="max-w-4xl mx-auto pb-10">
+                        <h2 class="text-lg font-bold mb-4">${emailMeta.title}</h2>
+                        <div class="text-sm text-gray-600 leading-relaxed space-y-4">
+                            ${emailMeta.emailBody || dbEntry.single}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 3. Inject the full content (Modern Gmail-like structure)
+            contentContainer.innerHTML = `
+                <!-- GMAIL/MODERN COMPACT HEADER -->
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h1 class="text-2xl font-bold mb-4">${emailMeta.title}</h1>
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-10 h-10 p-1 bg-white rounded-full border border-gray-300 flex items-center justify-center">
+                            <img src="${emailMeta.logo}" class="w-full h-full object-contain ${emailMeta.isPerson ? 'rounded-full' : ''}">
+                            <div class="absolute -bottom-0.5 -right-0.5 bg-white rounded-full p-0.5"><i class="ph-fill ph-seal-check text-brand text-sm verified-dot"></i></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-bold text-sm">${emailMeta.name} <span class="text-xs text-sub font-medium ml-1">&lt;support@${emailMeta.domain}&gt;</span></div>
+                            <div class="text-xs text-sub">to David Miller</div>
+                        </div>
+                        <div class="text-xs text-sub font-medium">${emailMeta.time}</div>
+                    </div>
+                </div>
+
+                <!-- BODY -->
+                ${dynamicBodyHTML}
+            `;
+        }
+
+        // --- 3. INTERACTION LOGIC ---
+        function handleSearch() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            filteredEmails = allEmails.filter(e => 
+                e.name.toLowerCase().includes(term) || 
+                e.title.toLowerCase().includes(term)
+            );
+            renderList(filteredEmails);
+        }
+
+        // --- 4. TOOLTIPS & MODALS ---
+        const tooltip = document.getElementById('auth-tooltip');
+        
+        function showTooltip(e, id, isLarge = false) {
+            const data = allEmails.find(e => e.id === id);
+            if(!data) return;
+
+            document.getElementById('tt-logo').src = data.logo;
+            document.getElementById('tt-brand').innerText = data.name;
+            document.getElementById('tt-domain').innerText = data.domain;
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            let left = isLarge ? rect.left + 50 : rect.right + 10;
+            let top = rect.top;
+            
+            if (left + 300 > window.innerWidth) left = rect.left - 300;
+
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+            tooltip.classList.remove('hidden');
+        }
+
+        function hideTooltip() {
+            tooltip.classList.add('hidden');
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            if(el.classList.contains('hidden')) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+        }
+        
+        // --- NEW FEATURE: TOGGLE SIDEBAR (FIXED) ---
+        let sidebarHidden = false;
+        function toggleRightSidebar() {
+            const sidebar = document.getElementById('right-sidebar');
+            const centerPanel = document.getElementById('center-panel');
+            const toggleText = document.getElementById('toggle-text');
+
+            sidebarHidden = !sidebarHidden;
+
+            if (sidebarHidden) {
+                // Hide Sidebar (Collapse)
+                sidebar.classList.add('hidden');
+                centerPanel.style.flex = '2'; // Center panel takes more space
+                toggleText.innerText = 'Show Widgets';
+            } else {
+                // Show Sidebar (Expand)
+                sidebar.classList.remove('hidden');
+                centerPanel.style.flex = '1'; // Center panel shrinks back
+                toggleText.innerText = 'Hide Widgets';
+            }
+        }
+
+        // Init
+        window.onload = () => {
+             generateEmails();
+             renderList();
+             // Manually select the first item on load to avoid the empty state on first render
+             if(allEmails.length > 0) selectEmail(allEmails[0].id);
+        };
+
+    </script>
 </body>
-    </html>
+</html>
