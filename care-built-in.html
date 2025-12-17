@@ -241,17 +241,35 @@
             margin-top: 40px;
         }
 
-        /* Footer */
-        footer { background: #F0F0F0; border-top: 1px solid #E0E0E0; padding: 80px 0; }
-        .footer-inner { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
-        .f-col h5 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 20px; }
-        .f-col li { margin-bottom: 12px; font-size: 14px; }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 60px; }
-            .narrative-card { padding: 40px 30px; }
-            .pull-quote { font-size: 32px; }
+        /* 
+         * ==========================================
+         * 9. FOOTER
+         * ==========================================
+         */
+        footer {
+            background: #F0F0F0;
+            border-top: 1px solid #E0E0E0;
+            padding: 80px 0;
         }
+        
+        .footer-inner {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-brand { width: 250px; }
+        .f-logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #111; margin-bottom: 16px; }
+        .f-logo svg { width: 24px; fill: black; }
+        .copyright { font-size: 13px; color: #888; }
+
+        .footer-cols { display: flex; gap: 80px; }
+        .f-col h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: #999; margin-bottom: 20px; font-weight: 600; }
+        .f-col ul li { margin-bottom: 14px; }
+        .f-col a { font-size: 14px; color: #333; transition: color 0.2s; }
+        .f-col a:hover { color: var(--color-blue-brand); }
     </style>
 </head>
 <body>
