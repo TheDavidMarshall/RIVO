@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal & Privacy Center - SpamSlam</title>
+    <!-- PAGE ICON (FAVICON) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📮</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* 
+         * ==========================================
+         * 1. VARIABLES & RESET
+         * ==========================================
+         */
+        :root {
+            --color-blue-brand: #4BBDF6;
+            --color-blue-dark: #3aa8db;
+            --color-orange: #FF5722;
+            --color-dark: #1F1F1F;
+            --color-beige: #F4F4F1;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --container-width: 1200px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--color-beige); color: var(--text-primary); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; cursor: pointer; transition: color 0.2s ease; }
+        
+        .font-serif { font-family: 'DM Serif Display', serif; }
+
+        /* 
+         * ==========================================
+         * 2. HEADER & NAV
+         * ==========================================
+         */
+        .hero-wrapper {
+            background-color: var(--color-blue-brand);
+            padding-bottom: 120px;
+            position: relative;
+            width: 100%;
+        }
+
+        .top-nav { display: flex; justify-content: space-between; padding: 32px 48px; position: relative; z-index: 10; }
+        .brand-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: rgba(255,255,255,0.9); text-transform: uppercase; }
+
+.hero-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 80px;
+            color: rgba(255,255,255,0.95);
+            line-height: 1;
+        }
+        
+        .nav-pill-wrapper { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); z-index: 100; }
+        .nav-pill { background: #1A1A1A; color: white; padding: 6px 24px 6px 6px; border-radius: 100px; display: flex; align-items: center; gap: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+
+        .pill-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1830f0, #4bbdf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skiff-swirl { 
+            width: 20px; 
+            height: 20px; 
+            fill: white; 
+        }
+
+        .nav-item {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            height: 40px; 
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            left: -20px;
+            width: 280px;
+            background: #1A1A1A;
+            border-radius: 16px;
+            padding: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            z-index: 101;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dd-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 10px;
+            transition: background 0.15s ease;
+        }
+
+        .dd-link:hover { 
+            background: rgba(255,255,255,0.08); 
+        }
+
+        .dd-icon {
+            width: 36px; 
+            height: 36px;
+            border-radius: 8px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 16px; 
+            flex-shrink: 0;
+        }
+
+        /* Product Dropdown Icons */
+        .dd-icon.mail { background: #4BBDF6; color: white; }
+        .dd-icon.pages { background: #eee; color: #333; }
+        .dd-icon.cal { background: #EC407A; color: white; }
+        .dd-icon.drive { background: #43A047; color: white; }
+
+        /* Resources Dropdown Icons (Outline Style) */
+        .dd-icon.resource {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+        }
+
+        .dd-info h4 { 
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 2px; 
+            color: #fff;
+        }
+
+        .dd-info p { 
+            font-size: 12px; 
+            color: #999; 
+        }
+
+        /* 
+         * ==========================================
+         * 3. PAGE CONTENT
+         * ==========================================
+         */
+        .hero-content {
+            text-align: center;
+            padding: 60px 20px 80px 20px;
+            color: white;
+        }
+        
+        .hero-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 72px;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .doc-container {
+            max-width: 800px;
+            margin: -100px auto 100px auto;
+            position: relative;
+            z-index: 5;
+            padding: 0 20px;
+        }
+
+        .doc-card {
+            background: white;
+            padding: 80px 80px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+        }
+
+        /* Typography */
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 36px;
+            color: #111;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #111;
+        }
+
+        h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 24px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        p, li {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        ul { margin-bottom: 20px; padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        strong { color: #111; font-weight: 600; }
+
+        .legal-link { color: var(--color-blue-brand); text-decoration: underline; }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 60px 0;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 30px;
+            background: #F8F9FA;
+            border: 1px solid #eee;
+            border-radius: 50px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: #eee; transform: translateY(-2px); }
+
+        /* Footer */
+        footer { background: #F0F0F0; border-top: 1px solid #E0E0E0; padding: 80px 0; }
+        .footer-inner { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+        .footer-cols { display: flex; gap: 80px; }
+        .f-col h5 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 20px; }
+        .f-col li { margin-bottom: 12px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <div class="hero-wrapper">
+        <nav class="top-nav">
+            <div class="text-white text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-white mt-1"></i>
+                <div class="brand-logo">powered by SpamSlam</div>
+            </div>
+            <div class="hero-number">*</div>
+        </nav>
+
+        <!-- FLOATING NAVIGATION (Pill) - SOURCE CODE -->
+        <div class="nav-pill-wrapper">
+            <div class="nav-pill">
+                <div class="pill-logo">
+                    <svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                
+                <!-- Product Dropdown -->
+                <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                        <a href="./MailRoom" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>Email Client Powered by SpamSlam</p></div></a>
+                        <a href="./simswap" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a>
+                        <a href="./care-built-in" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Care Built-in</h4><p>A real chance at a quieter, more peaceful digital life</p></div></a>
+                        <a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a></div>
+                </div>
+
+                <!-- Resources Dropdown -->
+                <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu" style="width: 250px;"><a href="./startup-week" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-file"></i></div><div class="dd-info"><h4>Startup Week</h4></div></a><a href="./Digital-Rights-Network" class="dd-link"><div class="dd-icon resource"><i class="fa-solid fa-building-columns"></i></div><div class="dd-info"><h4>Digital Rights Network</h4></div></a><a href="./white-paper" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-clock"></i></div><div class="dd-info"><h4>Whitepaper</h4></div></a><a href="./redirect" class="dd-link"><div class="dd-icon resource"><i class="fa-regular fa-circle-question"></i></div><div class="dd-info"><h4>Help</h4></div></a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Legal & Privacy Center</h1>
+            <p class="hero-subtitle">Transparency, Responsibility, and Your Rights.</p>
+        </div>        
+    </div>
+
+    <!-- MAIN LEGAL CONTENT -->
+    <div class="doc-container">
+        <div class="doc-card legal-content">
+            
+            <!-- SECTION 1: PRIVACY POLICY -->
+            <div id="privacy-policy">
+                <h2 class="section-title">Privacy Policy</h2>
+                <p><strong>Effective Date:</strong> November 2025</p>
+                <p>SpamSlam (“we”, “us”, “our”) provides an AI-powered inbox privacy and unsubscribe assistant. This Privacy Policy explains how we collect, use, disclose and safeguard your personal information.</p>
+
+                <h3>1. Information We Collect</h3>
+                <p><strong>Account information:</strong> name, email address, profile information you provide at signup.</p>
+                <p><strong>Inbox data (optional & consent-based):</strong> when you connect your email account we may read message metadata (sender, subject, timestamp), message headers, and message bodies that are necessary to identify sign-up/confirmation messages and locate unsubscribe links or support addresses. We only access inbox data when you grant permission.</p>
+                <p><strong>Usage & logs:</strong> IP addresses, device information, usage logs and diagnostic data to secure and improve the service.</p>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>We use data to provide scanning, classification, unsubscribe and data-deletion assistance, generate reports, perform analytics, and secure our platform. We may send transactional emails (account confirmations, receipts).</p>
+
+                <h3>3. Data Sharing & Third Parties</h3>
+                <p>We use third-party providers for infrastructure and services (examples: Google for Gmail integration, Supabase for storage, OpenAI for model inference, Stripe for payments, Cloudflare for hosting). We contractually require subprocessors to protect data and not to sell or use your email content for model training.</p>
+
+                <h3>4. Data Retention & Deletion</h3>
+                <p>Account metadata is retained while your account exists. You may request export or deletion of your data at any time by contacting privacy@spamslam.com. When processing email content for AI inference, we treat that data as ephemeral and do not use it to train models.</p>
+
+                <h3>5. Security</h3>
+                <p>We use industry-standard technical and organizational measures: TLS in transit, encryption at rest, access controls, regular security reviews. No third party is permitted to access your plaintext inbox contents for advertising or model training.</p>
+
+                <h3>6. Your Rights</h3>
+                <p>You may request access, correction, export, or deletion of your personal data. If you are in the EU, you can exercise GDPR rights; if you are in California, you may exercise rights under CCPA/CPRA. Contact <a href="mailto:privacy@spamslam.com" class="legal-link">privacy@spamslam.com</a>.</p>
+
+                <h3>7. International Transfers</h3>
+                <p>Data may be processed in jurisdictions outside your country. We take appropriate safeguards for international transfers where required.</p>
+
+                <h3>8. Contact</h3>
+                <p>If you have questions or want to exercise your rights, email <a href="mailto:privacy@spamslam.com" class="legal-link">privacy@spamslam.com</a>.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION 2: RESPONSIBLE AI POLICY -->
+            <div id="responsible-ai">
+                <h2 class="section-title">Responsible AI Policy</h2>
+                <p>SpamSlam uses AI to analyze email content to generate unsubscribe instructions and data deletion request templates. This policy outlines the principles governing the use of AI in our product.</p>
+                
+                <h3>Principles</h3>
+                <ul>
+                    <li><strong>Transparency:</strong> Users are informed when AI is used and shown the generated outputs prior to sending.</li>
+                    <li><strong>Human oversight:</strong> AI outputs are only suggestions — users review and confirm before any communication is sent.</li>
+                    <li><strong>Data minimization:</strong> We process only the data necessary for the requested feature (e.g., detecting unsubscribe links).</li>
+                    <li><strong>No training on user data:</strong> User emails are not used to train our models. Third-party models (OpenAI) process data transiently for inference only.</li>
+                    <li><strong>Safety & privacy:</strong> We avoid producing outputs that are abusive, discriminatory, or that could enable privacy violations.</li>
+                </ul>
+
+                <h3>User Controls</h3>
+                <p>Users may disconnect integrations at any time, delete stored results, and export or request deletion of their personal data.</p>
+
+                <h3>Contact</h3>
+                <p>Questions about AI behavior or concerns: <a href="mailto:privacy@spamslam.com" class="legal-link">privacy@spamslam.com</a></p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION 3: DATA PROCESSING AGREEMENT -->
+            <div id="dpa">
+                <h2 class="section-title">Data Processing Agreement (DPA)</h2>
+                <p>This DPA describes how SpamSlam (the “Processor”) processes personal data on behalf of its customers (the “Controller”). It is intended to meet the requirements of data protection laws including the GDPR.</p>
+
+                <h3>1. Roles</h3>
+                <p>The customer is the Controller. SpamSlam is the Processor for data collected to provide the service.</p>
+
+                <h3>2. Purpose of Processing</h3>
+                <p>Processing is carried out to analyze mailbox metadata and contents (when authorized) to identify senders, unsubscribe links, and to generate deletion requests or templates as requested by the user.</p>
+
+                <h3>3. Subprocessors</h3>
+                <p>We use subprocessors for infrastructure and services (e.g., Supabase, Cloudflare, OpenAI, Stripe). We maintain a list of subprocessors and ensure contractual protections.</p>
+
+                <h3>4. Security Measures</h3>
+                <p>Technical and organizational measures include TLS, encryption at rest, access controls and auditing.</p>
+
+                <h3>5. Data Subject Rights</h3>
+                <p>We assist Controllers in responding to data subject requests for access, correction, deletion and portability.</p>
+
+                <h3>6. Contact</h3>
+                <p>For DPA requests: <a href="mailto:privacy@spamslam.com" class="legal-link">privacy@spamslam.com</a></p>
+            </div>
+
+            <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to home</a>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+
+<div class="text-black text-3xl font-black flex items-center gap-1 tracking-tighter">
+                <span>MAIL</span>
+                <i class="ph-bold ph-arrow-right text-[#B2FF7A] mt-1"></i>
+                <span>ROOM</span>
+                <i class="ph-bold ph-arrow-up text-black mt-1"></i>
+                <div class="brand-logo text-black"></div>
+            </div>
+                <div class="f-logo">powered by SpamSlam</div>
+                <div class="copyright">© 2025. All rights reserved.</div>
+            </div>
+            <div class="footer-cols">
+                <div class="f-col"><h5>Check This</h5><ul><li><a href="uservoice.com">Request a feature</a></li><li><a href="https://www.atlassian.com/software/statuspage">System status</a></li><li><a href="#">Report a problem</a></li><li><a href="#">Report a security issue</a></li><li><a href="#">Transparency report</a></li></ul></div>
+                <div class="f-col"><h5>Join Us</h5><ul><li><a href="https://job-boards.eu.greenhouse.io/">Carrer & Internship</a></li></ul></div>
+                <div class="f-col"><h5>About Us</h5><ul><li><a href="#">Team</a></li><li><a href="#">Whitepaper</a></li><li><a href="#">Twitter</a></li></ul></div>
+                <div class="f-col"><h5>Legal</h5><ul><li><a href="./privacy-policy">Privacy policy</a></li><li><a href="./terms">Terms of service</a></li><li><a href="./responsible-ai">Acceptable use policy</a></li></ul></div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
