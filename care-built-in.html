@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care, Built In - SpamSlam</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 
+         * ==========================================
+         * 1. VARIABLES & RESET
+         * ==========================================
+         */
+        :root {
+            --color-blue-brand: #4BBDF6;
+            --color-blue-dark: #3aa8db;
+            --color-blue-light: #e0f2fe;
+            --color-orange: #FF5722;
+            --color-dark: #1F1F1F;
+            --color-beige: #F4F4F1;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --container-width: 1200px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--color-beige); color: var(--text-primary); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; cursor: pointer; transition: color 0.2s ease; }
+        
+        .font-serif { font-family: 'DM Serif Display', serif; }
+
+        /* 
+         * ==========================================
+         * 2. HEADER & NAV (Standard)
+         * ==========================================
+         */
+        .hero-wrapper {
+            background-color: var(--color-blue-brand);
+            padding-bottom: 140px; /* Space for overlap */
+            position: relative;
+            width: 100%;
+        }
+
+        .top-nav { display: flex; justify-content: space-between; padding: 32px 48px; position: relative; z-index: 10; }
+        .brand-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: rgba(255,255,255,0.9); text-transform: uppercase; }
+        .hero-number { font-family: 'DM Serif Display', serif; font-size: 80px; color: rgba(255,255,255,0.95); line-height: 1; }
+
+        .nav-pill-wrapper { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); z-index: 100; }
+        .nav-pill { background: #1A1A1A; color: white; padding: 6px 24px 6px 6px; border-radius: 100px; display: flex; align-items: center; gap: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+        .pill-logo { width: 40px; height: 40px; background: linear-gradient(135deg, #FF7043, #E64A19); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .skiff-swirl { width: 20px; height: 20px; fill: white; }
+        .nav-item { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; cursor: pointer; position: relative; height: 40px; }
+
+        /* Dropdown (Hidden by default) */
+        .dropdown-menu { position: absolute; top: 50px; left: -20px; width: 280px; background: #1A1A1A; border-radius: 16px; padding: 10px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.2s; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 101; }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dd-link { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 10px; }
+        .dd-link:hover { background: rgba(255,255,255,0.08); }
+        .dd-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #333; color: #999; }
+        .dd-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; color: #fff; }
+
+        /* 
+         * ==========================================
+         * 3. PAGE CONTENT (Editorial Style)
+         * ==========================================
+         */
+        .hero-content {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+        }
+        
+        .hero-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 96px;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        /* Narrative Card */
+        .narrative-container {
+            max-width: 800px;
+            margin: -100px auto 100px auto;
+            position: relative;
+            z-index: 5;
+            padding: 0 20px;
+        }
+
+        .narrative-card {
+            background: white;
+            padding: 100px 80px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+        }
+
+        .story-block {
+            margin-bottom: 60px;
+        }
+
+        .story-heading {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .story-text {
+            font-size: 20px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .story-list {
+            list-style: none;
+            margin: 30px 0;
+            padding-left: 20px;
+            border-left: 3px solid var(--color-blue-brand);
+        }
+
+        .story-list li {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .pull-quote {
+            font-family: 'DM Serif Display', serif;
+            font-size: 42px;
+            line-height: 1.2;
+            color: var(--color-blue-brand);
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .highlight-box {
+            background: #F8F9FA;
+            padding: 40px;
+            border-radius: 16px;
+            margin: 40px 0;
+            border: 1px solid #eee;
+        }
+
+        .final-note {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111;
+            margin-top: 40px;
+        }
+
+        /* Footer */
+        footer { background: #F0F0F0; border-top: 1px solid #E0E0E0; padding: 80px 0; }
+        .footer-inner { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+        .f-col h5 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 20px; }
+        .f-col li { margin-bottom: 12px; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 60px; }
+            .narrative-card { padding: 40px 30px; }
+            .pull-quote { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <div class="hero-wrapper">
+        <nav class="top-nav">
+            <div class="brand-logo">SPAMSLAM</div>
+            <div class="hero-number">05</div>
+        </nav>
+
+        <div class="nav-pill-wrapper">
+            <div class="nav-pill">
+                <div class="pill-logo"><svg viewBox="0 0 24 24" class="skiff-swirl"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+                <div class="nav-item">
+                    Product <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dd-link"><div class="dd-icon"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>Mail</h4></div></a>
+                    </div>
+                </div>
+                <div class="nav-item">Resources <i class="fa-solid fa-chevron-down"></i></div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Care, Built In.</h1>
+        </div>
+    </div>
+
+    <!-- MAIN NARRATIVE CONTENT -->
+    <div class="narrative-container">
+        <div class="narrative-card">
+            
+            <div class="story-block">
+                <h2 class="story-heading">It usually starts the same way.</h2>
+                <ul class="story-list">
+                    <li>Too many messages.</li>
+                    <li>Codes that never arrive.</li>
+                    <li>Accounts you don’t remember creating.</li>
+                    <li>A feeling that your phone and inbox no longer belong to you.</li>
+                </ul>
+                <p class="story-text">For a lot of people, that’s just “how the internet is.”</p>
+            </div>
+
+            <div class="pull-quote">We don’t think it has to be.</div>
+
+            <div class="story-block">
+                <p class="story-text">We met students who couldn’t afford another subscription. Small business owners drowning in spam. People locked out of accounts because their number changed. Communities where privacy tools exist — but feel out of reach.</p>
+                <p class="story-text">They weren’t asking for more features. They were asking for quiet. For control. For something that just works.</p>
+            </div>
+
+            <div class="story-block">
+                <h2 class="story-heading">So we built it differently.</h2>
+                <p class="story-text">We built a place where your digital life feels calmer. Where spam doesn’t pile up. Where you can finally see what’s connected to you — and let go of what isn’t.</p>
+                <p class="story-text">And we built sign-ins that don’t depend on fragile text messages, so your access doesn’t disappear when your number changes or when someone tries to take it from you.</p>
+                <p class="story-text" style="color:var(--color-blue-brand); font-weight:600;">Care, built in — not added later.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h2 class="story-heading" style="margin-top:0;">Then we asked ourselves a harder question.</h2>
+                <p class="story-text">What about the people who need this most, but can’t afford another premium plan?</p>
+                <p class="story-text"><strong>So this campaign is different.</strong></p>
+                <p class="story-text">We’re opening access. Partnering with universities in communities that need it most. Giving students and families a safer digital start — free.</p>
+            </div>
+
+            <div class="story-block">
+                <p class="story-text">Not a trial. Not a discount. A real chance at a quieter, more peaceful digital life. Because protection shouldn’t be a privilege.</p>
+            </div>
+
+            <div class="final-note">
+                <p>If you’ve ever felt overwhelmed by the noise,<br>
+                if you’ve ever helped someone fix a hacked account,<br>
+                if you’ve ever wished the internet felt a little more human —</p>
+                
+                <p style="color:var(--color-blue-brand); font-size:32px; font-family:'DM Serif Display', serif; margin-top:20px;">This is for you.</p>
+                <p style="font-size:16px; color:#888;">And for the people you care about.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div style="width:200px;"><b>SPAMSLAM</b><br><span style="font-size:12px; color:#888;">© 2025. All rights reserved.</span></div>
+            <div class="footer-cols">
+                <div class="f-col"><h5>Products</h5><ul><li>Mail</li><li>Auth</li><li>Privacy</li></ul></div>
+                <div class="f-col"><h5>Legal</h5><ul><li>Privacy</li><li>Terms</li></ul></div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
