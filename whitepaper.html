@@ -12,6 +12,21 @@
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- 1. Include Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- 2. Configure Tailwind to disable global resets -->
+<script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false, // This prevents it from changing your h1, h2, p, etc.
+      },
+      // Optional: Use a prefix to prevent class name conflicts with your existing CSS
+      prefix: 'tw-', 
+    }
+</script>
 
     <style>
         /* 
