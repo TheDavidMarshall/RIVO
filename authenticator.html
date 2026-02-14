@@ -340,13 +340,13 @@
         }
         .btn-stack-item:hover { background: #f5f5f5; }
         
-        .btn-spamslam {
+        .btn-rivo {
             width: 100%; padding: 14px; border-radius: 25px; font-size: 0.85rem; font-weight: 600;
             display: flex; align-items: center; justify-content: center; gap: 10px;
             cursor: pointer; border: none; background: var(--deep-blue); color: white;
             box-shadow: 0 4px 10px rgba(10, 30, 133, 0.2); transition: transform 0.2s;
         }
-        .btn-spamslam:active { transform: scale(0.96); }
+        .btn-rivo:active { transform: scale(0.96); }
 
         /* --- DEVICE 2: REALISTIC HOME SCREEN (UPDATED) --- */
         .home-ui {
@@ -594,7 +594,7 @@
                 <!-- Product Dropdown -->
                 <div class="nav-item">Product <i class="fa-solid fa-chevron-down"></i>
                     <div class="dropdown-menu">
-                        <a href="./mail" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>MailRoom</h4><p>Email Client Powered by SpamSlam</p></div></a>
+                        <a href="./mail" class="dd-link"><div class="dd-icon mail"><i class="fa-solid fa-envelope"></i></div><div class="dd-info"><h4>Mail</h4><p>Email Client Powered by SpamSlam</p></div></a>
                         <a href="./authenticator" class="dd-link"><div class="dd-icon pages"><i class="fa-solid fa-file-lines"></i></div><div class="dd-info"><h4>Digital OTP</h4><p>No more text messages. Get secure verification codes directly inside the app.</p></div></a>
                         <a href="./care-built-in" class="dd-link"><div class="dd-icon cal"><i class="fa-regular fa-calendar"></i></div><div class="dd-info"><h4>Care Built-in</h4><p>A real chance at a quieter, more peaceful digital life</p></div></a>
                         <a href="./startup-api" class="dd-link"><div class="dd-icon drive"><i class="fa-solid fa-hard-drive"></i></div><div class="dd-info"><h4>Startups x API</h4><p>Privacy Compliance Made Simple</p></div></a>
@@ -664,7 +664,7 @@
                                 <div style="text-align: center; font-size: 0.7rem; color: #999; margin: 5px 0;">OR</div>
 
                                 <!-- THE INTERACTIVE BUTTON -->
-                                <button class="btn-spamslam" id="step1Btn" onclick="triggerLogin()">
+                                <button class="btn-rivo" id="step1Btn" onclick="triggerLogin()">
                                     <i class="fas fa-shield-alt"></i> Verify with Rivo
                                 </button>
 
@@ -1086,7 +1086,7 @@
         function resetDemo() {
             // Reset UI
             rideSuccess.style.opacity = '0';
-            btn1.innerHTML = '<i class="fas fa-shield-alt"></i> Verify with SpamSlam';
+            btn1.innerHTML = '<i class="fas fa-shield-alt"></i> Verify with Rivo';
             btn1.style.background = 'var(--deep-blue)';
             
             notif.classList.remove('active');
