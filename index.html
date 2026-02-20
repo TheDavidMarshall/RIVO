@@ -29,6 +29,24 @@
     <style>
         :root {
             --pop-orange: #B2FF7A;
+            /* Pop Palette */
+            
+            --pop-yellow: #FFEA00;
+            --pop-red: #E4002B;     /* KFC Red */
+            --pop-green: #00E055;   /* Bright Green */
+            --pop-blue: #4BBDF6;    /* Brand Blue */
+            --pop-cyan: #00FFFF;
+            --pop-bright: #ffc82e;
+            --pop-greentext: #036221;
+            --black: #000000;
+            --white: #FFFFFF;
+            
+            --border-thick: 4px solid var(--black);
+            --shadow-hard: 12px 12px 0px var(--black);
+            
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -117,22 +135,9 @@
             width: 100%;
         }
 
-        /* Top Navigation Bar */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 32px 48px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand-logo {
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: rgba(255,255,255,0.9);
-            text-transform: uppercase;
+        .top-nav { 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 32px 48px; position: relative; z-index: 100; 
         }
 
         .hero-number {
@@ -141,131 +146,46 @@
             color: rgba(255,255,255,0.95);
             line-height: 1;
         }
-
-        /* Floating Navigation Pill */
-        .nav-pill-wrapper {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
+        
+        .brand-logo { 
+            font-size: 16px; font-weight: 900; letter-spacing: 1px; 
+            text-transform: uppercase; 
+            background: var(--black); color: var(--white);
+            padding: 5px 10px; transform: rotate(-2deg);
         }
 
-        .nav-pill {
-            background: #ffffff;
-            color: #1830f0;
-            padding: 6px;
-            padding-right: 24px;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        .nav-pill-wrapper { 
+            position: absolute; top: 32px; left: 50%; transform: translateX(-50%); z-index: 100; 
         }
-
-        .pill-logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #1830f0, #4bbdf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .nav-pill { 
+            background: var(--white); color: var(--black); 
+            padding: 8px 24px 8px 8px; border-radius: 50px; 
+            display: flex; align-items: center; gap: 24px; 
+            border: var(--border-thick);
+            box-shadow: 4px 4px 0px var(--black);
         }
-
-        .mailroom-swirl { 
-            width: 20px; 
-            height: 20px; 
-            fill: white; 
+        .pill-logo { 
+            width: 40px; height: 40px; 
+            background: var(--pop-orange); 
+            border: 2px solid var(--black);
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
         }
-
-        .nav-item {
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            position: relative;
-            height: 40px; /* Expands hover area */
+        .nav-item { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; cursor: pointer; position: relative; }
+        
+        /* Dropdown */
+        .dropdown-menu { 
+            position: absolute; top: 60px; left: -20px; width: 260px; 
+            background: var(--white); border: var(--border-thick); 
+            border-radius: 0; padding: 0; opacity: 0; visibility: hidden; 
+            transform: translateY(-10px); transition: 0.2s; 
+            box-shadow: 8px 8px 0px var(--black); z-index: 101; 
         }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;}
+        .dd-link { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 2px solid var(--black); }
+        .dd-link:hover { background: var(--pop-yellow); }
+        .dd-icon { font-size: 18px; color: var(--black); }
 
-        .nav-item i { 
-            font-size: 10px; 
-            color: #888; 
-            transition: transform 0.2s; 
-        }
-
-        .nav-item:hover i { 
-            transform: rotate(180deg); 
-        }
-
-        /* Dropdown Menus */
-        .dropdown-menu {
-            position: absolute;
-            top: 50px;
-            left: -20px;
-            width: 280px;
-            background: #fffefe;
-            border-radius: 16px;
-            padding: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            z-index: 101;
-        }
-
-        .nav-item:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dd-link {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px;
-            border-radius: 10px;
-            transition: background 0.15s ease;
-        }
-
-        .dd-link:hover { 
-            background: rgba(255,255,255,0.08); 
-        }
-
-        .dd-icon {
-            width: 36px; 
-            height: 36px;
-            border-radius: 8px;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 16px; 
-            flex-shrink: 0;
-        }
-
-        /* Product Dropdown Icons */
-        .dd-icon.mail { background: #4BBDF6; color: white; }
-        .dd-icon.pages { background: #eee; color: #333; }
-        .dd-icon.cal { background: #EC407A; color: white; }
-        .dd-icon.drive { background: #43A047; color: white; }
-
-        /* Resources Dropdown Icons (Outline Style) */
-        .dd-icon.resource {
-            background: transparent;
-            border: 1px solid #444;
-            color: #999;
-        }
-
-        .dd-info h4 { 
-            font-size: 14px; 
-            font-weight: 600; 
-            margin-bottom: 2px; 
-            color: #181717;
-        }
 
         .dd-info p { 
             font-size: 12px; 
