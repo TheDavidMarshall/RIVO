@@ -130,10 +130,16 @@
             transform: translateY(-10px); transition: 0.2s; 
             box-shadow: 8px 8px 0px var(--black); z-index: 101; 
         }
-        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;}
         .dd-link { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 2px solid var(--black); }
         .dd-link:hover { background: var(--pop-yellow); }
         .dd-icon { font-size: 18px; color: var(--black); }
+
+
+        .dd-info p { 
+            font-size: 12px; 
+            color: #999; 
+        }
 
         /* 
          * ==========================================
